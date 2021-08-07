@@ -3,31 +3,87 @@ using UnityEngine;
 
 public class InterfacePanelGroup : MonoBehaviour
 {
-    private List<InterfacePanel> _subPanels = new List<InterfacePanel>();
+	public InterfacePanelGroupOrientation GroupOrientation;
 
-    public void AddPanel(InterfacePanel panel)
-    {
-        _subPanels.Add(panel);
-    }
+	private List<InterfacePanel> _subPanels = new List<InterfacePanel>();
+	private List<InterfacePanelGroup> _subGroups = new List<InterfacePanelGroup>();
 
-    public void RemoveAndDestroyPanel(InterfacePanel panel)
-    {
-        if(!_subPanels.Contains(panel))
-        {
-            throw new System.Exception("Tried to remove panel that is not in group");
-        }
+	public enum InterfacePanelGroupOrientation
+	{
+		Horizontal,
+		Vertical
+	}
 
-        _subPanels.Remove(panel);
-        Object.Destroy(panel.gameObject);
-    }
+	public void InsertPanel(InterfacePanel panel)
+	{
+		if (_subPanels.Contains(panel))
+		{
+			throw new System.Exception("Panel already in this group!");
+		}
 
-    public void Cleanup()
-    {
-        if (_subPanels.Count == 0)
-        {
-            Object.Destroy(gameObject);
-        }
+		if (panel.ParentPanelGroup)
+		{
+			panel.ParentPanelGroup.RemovePanel(panel);
+		}
+		else if (InterfaceController.Instance.RootLevelPanels.Contains(panel))
+		{
+			InterfaceController.Instance.RootLevelPanels.Remove(panel);
+		}
 
-        Debug.LogWarning(_subPanels.Count);
-    }
+		panel.AssignToPanelGroup(this);
+		_subPanels.Add(panel);
+	}
+
+	public void RemovePanel(InterfacePanel panel)
+	{
+		if (!_subPanels.Contains(panel))
+		{
+			throw new System.Exception("Tried to remove panel not in group");
+		}
+
+		_subPanels.Remove(panel);
+	}
+
+	public void RemoveAndDestroyPanel(InterfacePanel panel)
+	{
+		if (!_subPanels.Contains(panel))
+		{
+			throw new System.Exception("Tried to remove panel that is not in group");
+		}
+
+		_subPanels.Remove(panel);
+		Object.Destroy(panel.gameObject);
+	}
+
+	public bool Cleanup()
+	{
+		Debug.LogWarning("Cleanup");
+
+		if (_subPanels.Count == 0 && _subGroups.Count == 0)
+		{
+			Debug.LogWarning("Destroying");
+			Object.Destroy(gameObject);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	// public void AddSubGroup(InterfacePanelGroup panelGroup)
+	// {
+	// 	_subGroups.Add(panelGroup);
+	// }
+
+	// public void RemoveAndDestroySubGroup(InterfacePanelGroup panelGroup)
+	// {
+	// 	if (!_subGroups.Contains(panelGroup))
+	// 	{
+	// 		throw new System.Exception("Tried to remove panel that is not in group");
+	// 	}
+
+	// 	_subGroups.Remove(panelGroup);
+	// 	Object.Destroy(panelGroup);
+	// }
 }
