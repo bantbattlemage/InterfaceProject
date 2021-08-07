@@ -9,8 +9,7 @@ public class InterfacePanel : MonoBehaviour
 	public Button VerticalSplitButton;
 
 	public Transform Body;
-	public InterfacePanelGroup ParentPanelGroup { get; private set; }
-
+	public InterfacePanelGroup ParentPanelGroup;
 	public delegate void PanelEvent(InterfacePanel sender);
 	public PanelEvent PanelCloseButtonClicked;
 	public PanelEvent PanelSplitHorizontalButtonClicked;

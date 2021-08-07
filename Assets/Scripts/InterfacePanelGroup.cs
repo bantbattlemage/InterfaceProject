@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class InterfacePanelGroup : MonoBehaviour
@@ -36,6 +37,11 @@ public class InterfacePanelGroup : MonoBehaviour
 
 	public void RemovePanel(InterfacePanel panel)
 	{
+		if (panel == null || panel.gameObject == null)
+		{
+			throw new System.Exception("null panel");
+		}
+
 		if (!_subPanels.Contains(panel))
 		{
 			throw new System.Exception("Tried to remove panel not in group");
@@ -51,28 +57,40 @@ public class InterfacePanelGroup : MonoBehaviour
 			throw new System.Exception("Tried to remove panel that is not in group");
 		}
 
+		panel.ParentPanelGroup = null;
 		_subPanels.Remove(panel);
 		Object.Destroy(panel.gameObject);
+		Object.Destroy(panel);
 	}
 
 	public bool Cleanup()
 	{
 		Debug.LogWarning("Cleanup");
 
-		if (_subPanels.Count == 0 && _subGroups.Count == 0)
+		List<Transform> children = InterfaceController.GetChildList(transform);
+
+		if (children.Count == 0)
 		{
 			Object.Destroy(gameObject);
 			return true;
 		}
-		else if (_subPanels.Count == 1)
+		else if (children.Count == 1)
 		{
-			if (transform.parent.GetComponentInParent<InterfacePanelGroup>())
+			InterfacePanel panel = children[0].GetComponent<InterfacePanel>();
+			if (panel != null)
 			{
-				transform.parent.GetComponentInParent<InterfacePanelGroup>().InsertPanel(_subPanels[0]);
+				if (transform.parent == InterfaceController.Instance.Body)
+				{
+					panel.SetToRoot();
+				}
+				else
+				{
+					transform.parent.GetComponent<InterfacePanelGroup>().InsertPanel(panel);
+				}
 			}
 			else
 			{
-				_subPanels[0].SetToRoot();
+				children[0].SetParent(transform.parent);
 			}
 
 			Object.Destroy(gameObject);
@@ -83,20 +101,4 @@ public class InterfacePanelGroup : MonoBehaviour
 			return false;
 		}
 	}
-
-	// public void AddSubGroup(InterfacePanelGroup panelGroup)
-	// {
-	// 	_subGroups.Add(panelGroup);
-	// }
-
-	// public void RemoveAndDestroySubGroup(InterfacePanelGroup panelGroup)
-	// {
-	// 	if (!_subGroups.Contains(panelGroup))
-	// 	{
-	// 		throw new System.Exception("Tried to remove panel that is not in group");
-	// 	}
-
-	// 	_subGroups.Remove(panelGroup);
-	// 	Object.Destroy(panelGroup);
-	// }
 }

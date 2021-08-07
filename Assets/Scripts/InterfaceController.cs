@@ -97,12 +97,11 @@ public class InterfaceController : MonoBehaviour
 	private void SplitPanel(InterfacePanel sender, InterfacePanelGroup.InterfacePanelGroupOrientation orientation)
 	{
 		Transform parent;
-		int childIndex = 0;
+		int childIndex = sender.transform.GetSiblingIndex();
 
 		if (sender.ParentPanelGroup)
 		{
 			parent = sender.ParentPanelGroup.transform;
-			childIndex = sender.transform.GetSiblingIndex();
 		}
 		else
 		{
@@ -126,7 +125,12 @@ public class InterfaceController : MonoBehaviour
 		{
 			if (panel.ParentPanelGroup != null)
 			{
+				int index = ActivePanelGroups.IndexOf(panel.ParentPanelGroup);
 				panel.ParentPanelGroup.RemoveAndDestroyPanel(panel);
+				if (ActivePanelGroups[index].Cleanup())
+				{
+					ActivePanelGroups.RemoveAt(index);
+				}
 			}
 			else
 			{
@@ -144,8 +148,22 @@ public class InterfaceController : MonoBehaviour
 			if (ActivePanelGroups[i].Cleanup())
 			{
 				ActivePanelGroups.RemoveAt(i);
-				break;
 			}
 		}
+	}
+
+	public static List<Transform> GetChildList(Transform target)
+	{
+		List<Transform> childList = new List<Transform>();
+		for (int i = 0; i < target.childCount; i++)
+		{
+			Transform c = target.GetChild(i);
+			if (c.GetComponent<InterfacePanelGroup>() != null || c.GetComponent<InterfacePanel>() != null)
+			{
+				childList.Add(c);
+			}
+		}
+
+		return childList;
 	}
 }
