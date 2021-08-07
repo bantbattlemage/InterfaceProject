@@ -59,19 +59,17 @@ public class InterfacePanelGroup : MonoBehaviour
 
 		panel.ParentPanelGroup = null;
 		_subPanels.Remove(panel);
-		Object.Destroy(panel.gameObject);
-		Object.Destroy(panel);
+		Destroy(panel.gameObject);
+		Destroy(panel);
 	}
 
 	public bool Cleanup()
 	{
-		Debug.LogWarning("Cleanup");
-
 		List<Transform> children = InterfaceController.GetChildList(transform);
 
 		if (children.Count == 0)
 		{
-			Object.Destroy(gameObject);
+			Destroy(gameObject);
 			return true;
 		}
 		else if (children.Count == 1)
@@ -93,7 +91,7 @@ public class InterfacePanelGroup : MonoBehaviour
 				children[0].SetParent(transform.parent);
 			}
 
-			Object.Destroy(gameObject);
+			Destroy(gameObject);
 			return true;
 		}
 		else

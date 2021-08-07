@@ -8,13 +8,16 @@ public class InterfaceController : MonoBehaviour
 	public GameObject DefaultInterfaceGroupPrefab;
 	public GameObject HorizontalInterfaceGroupPrefab;
 	public GameObject VerticalInterfaceGroupPrefab;
+	public GameObject PopUpPanelPrefab;
 
 	public Button NewPanelButton;
 
 	public Transform Body;
+	public Transform PopUpLayer;
 
 	public List<InterfacePanel> RootLevelPanels = new List<InterfacePanel>();
 	public List<InterfacePanelGroup> ActivePanelGroups = new List<InterfacePanelGroup>();
+	public List<PopUpPanel> ActivePopUpPanels = new List<PopUpPanel>();
 
 	private static InterfaceController _instance;
 	public static InterfaceController Instance
@@ -37,6 +40,7 @@ public class InterfaceController : MonoBehaviour
 		NewPanelButton.onClick.AddListener(OnNewPanelButtonClicked);
 
 		CreateNewPanel();
+		CreateNewPopUp("Test", "dickbutt");
 	}
 
 	private void OnNewPanelButtonClicked()
@@ -57,6 +61,27 @@ public class InterfaceController : MonoBehaviour
 	private void OnPanelCloseButtonClicked(InterfacePanel sender)
 	{
 		DestroyPanel(sender);
+	}
+
+	private void OnPopUpPanelDestroyed(PopUpPanel sender)
+	{
+		if (!ActivePopUpPanels.Contains(sender))
+		{
+			throw new System.Exception("stray pop up?");
+		}
+
+		ActivePopUpPanels.Remove(sender);
+	}
+
+	public PopUpPanel CreateNewPopUp(string popUpName, string popUpText, PopUpButtonProperties[] buttons = null)
+	{
+		GameObject newPopUpObject = Instantiate(PopUpPanelPrefab, PopUpLayer);
+		PopUpPanel newPopUpPanel = newPopUpObject.GetComponent<PopUpPanel>();
+		newPopUpPanel.InitializePopUp(popUpName, popUpText, buttons);
+		newPopUpPanel.PanelDetroyed += OnPopUpPanelDestroyed;
+		ActivePopUpPanels.Add(newPopUpPanel);
+
+		return newPopUpPanel;
 	}
 
 	public InterfacePanel CreateNewPanel(Transform parent = null)
@@ -140,7 +165,7 @@ public class InterfaceController : MonoBehaviour
 		else
 		{
 			RootLevelPanels.Remove(panel);
-			Object.Destroy(panel.gameObject);
+			Destroy(panel.gameObject);
 		}
 
 		for (int i = ActivePanelGroups.Count - 1; i >= 0; i--)
