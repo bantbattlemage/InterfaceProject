@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,9 +15,6 @@ public class InterfaceController : MonoBehaviour
 
 	public List<InterfacePanel> RootLevelPanels = new List<InterfacePanel>();
 	public List<InterfacePanelGroup> ActivePanelGroups = new List<InterfacePanelGroup>();
-
-	public delegate void PanelDestroyedEvent();
-	public PanelDestroyedEvent PanelDestroyed;
 
 	private static InterfaceController _instance;
 	public static InterfaceController Instance
@@ -37,9 +35,6 @@ public class InterfaceController : MonoBehaviour
 	{
 		//	Assign button callbacks
 		NewPanelButton.onClick.AddListener(OnNewPanelButtonClicked);
-
-		//	Assign event callbacks
-		PanelDestroyed += OnPanelDestroyed;
 
 		CreateNewPanel();
 	}
@@ -64,17 +59,6 @@ public class InterfaceController : MonoBehaviour
 		DestroyPanel(sender);
 	}
 
-	private void OnPanelDestroyed()
-	{
-		for (int i = ActivePanelGroups.Count - 1; i >= 0; i--)
-		{
-			if (ActivePanelGroups[i].Cleanup())
-			{
-				ActivePanelGroups.RemoveAt(i);
-			}
-		}
-	}
-
 	public InterfacePanel CreateNewPanel(Transform parent = null)
 	{
 		if (parent == null)
@@ -84,7 +68,7 @@ public class InterfaceController : MonoBehaviour
 
 		GameObject newPanel = Instantiate(DefaultInterfaceGroupPrefab, parent);
 		InterfacePanel panel = newPanel.GetComponent<InterfacePanel>();
-		panel.PanelName.text = string.Format("New Panel {0}", RootLevelPanels.Count);
+		panel.PanelName.text = string.Format("New Panel {0}", FindObjectsOfType<InterfacePanel>().ToList().Count);
 		Debug.Log(string.Format("{0} created", panel.PanelName.text));
 
 		if (parent == Body)
@@ -112,8 +96,21 @@ public class InterfaceController : MonoBehaviour
 
 	private void SplitPanel(InterfacePanel sender, InterfacePanelGroup.InterfacePanelGroupOrientation orientation)
 	{
-		Transform parent = RootLevelPanels.Contains(sender) ? Body : sender.ParentPanelGroup.transform;
+		Transform parent;
+		int childIndex = 0;
+
+		if (sender.ParentPanelGroup)
+		{
+			parent = sender.ParentPanelGroup.transform;
+			childIndex = sender.transform.GetSiblingIndex();
+		}
+		else
+		{
+			parent = Body;
+		}
+
 		GameObject newGroupObject = Instantiate(orientation == InterfacePanelGroup.InterfacePanelGroupOrientation.Vertical ? VerticalInterfaceGroupPrefab : HorizontalInterfaceGroupPrefab, parent);
+		newGroupObject.transform.SetSiblingIndex(childIndex);
 		InterfacePanelGroup newGroup = newGroupObject.GetComponent<InterfacePanelGroup>();
 		ActivePanelGroups.Add(newGroup);
 		newGroup.InsertPanel(sender);
@@ -142,6 +139,13 @@ public class InterfaceController : MonoBehaviour
 			Object.Destroy(panel.gameObject);
 		}
 
-		PanelDestroyed();
+		for (int i = ActivePanelGroups.Count - 1; i >= 0; i--)
+		{
+			if (ActivePanelGroups[i].Cleanup())
+			{
+				ActivePanelGroups.RemoveAt(i);
+				break;
+			}
+		}
 	}
 }

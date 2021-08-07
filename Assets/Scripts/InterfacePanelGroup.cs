@@ -61,7 +61,20 @@ public class InterfacePanelGroup : MonoBehaviour
 
 		if (_subPanels.Count == 0 && _subGroups.Count == 0)
 		{
-			Debug.LogWarning("Destroying");
+			Object.Destroy(gameObject);
+			return true;
+		}
+		else if (_subPanels.Count == 1)
+		{
+			if (transform.parent.GetComponentInParent<InterfacePanelGroup>())
+			{
+				transform.parent.GetComponentInParent<InterfacePanelGroup>().InsertPanel(_subPanels[0]);
+			}
+			else
+			{
+				_subPanels[0].SetToRoot();
+			}
+
 			Object.Destroy(gameObject);
 			return true;
 		}
