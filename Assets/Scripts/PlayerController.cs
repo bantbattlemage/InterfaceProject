@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	public GameObject InterfacePrefab;
+	public InterfaceController PlayerInterface;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	void Start()
+	{
+		if (PlayerInterface == null)
+		{
+			GameObject playerInterface = Instantiate(InterfacePrefab, transform);
+			PlayerInterface = playerInterface.GetComponent<InterfaceController>();
+			PlayerInterface.LogInScreen.gameObject.SetActive(true);
+		}
+	}
 }

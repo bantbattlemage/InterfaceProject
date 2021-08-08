@@ -11,6 +11,7 @@ public class PopUpPanel : MonoBehaviour
 	public Text PanelText;
 	public Button CloseButton;
 	public Button[] PopUpButtons;
+	public InputField[] InputFields;
 
 	public delegate void PopUpPanelEvent(PopUpPanel sender);
 	public PopUpPanelEvent PanelDetroyed;

@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: 9e51805fabbcbd449b85c9b04835ba9f
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Moonrising
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 4b6aad79ddc1ed645bd11317e6eab90a, type: 3}
+  - {fileID: 12800000, guid: 5385af19f65c2944198221b23c7d349e, type: 3}
+  - {fileID: 12800000, guid: d614d0a47df1eb04698270bf53796943, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

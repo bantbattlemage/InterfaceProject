@@ -11,6 +11,7 @@ public class InterfaceController : MonoBehaviour
 	public GameObject PopUpPanelPrefab;
 
 	public Button NewPanelButton;
+	public LogInScreenController LogInScreen;
 
 	public Transform Body;
 	public Transform PopUpLayer;
@@ -38,6 +39,10 @@ public class InterfaceController : MonoBehaviour
 	{
 		//	Assign button callbacks
 		NewPanelButton.onClick.AddListener(OnNewPanelButtonClicked);
+
+		//	Set up Log In Screen
+		LogInScreen.InitializeLogInScreen();
+		LogInScreen.OnSuccessfulLogin += LogIn;
 	}
 
 	void Update()
@@ -79,6 +84,12 @@ public class InterfaceController : MonoBehaviour
 		}
 
 		ActivePopUpPanels.Remove(sender);
+	}
+
+	public void LogIn()
+	{
+		LogInScreen.gameObject.SetActive(false);
+		Debug.Log("Logged In");
 	}
 
 	public PopUpPanel CreateNewPopUp(string popUpName, string popUpText, PopUpButtonProperties[] buttons = null, PopUpInputFieldProperties[] inputFields = null)
