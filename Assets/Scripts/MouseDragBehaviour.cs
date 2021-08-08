@@ -21,6 +21,12 @@ public class MouseDragBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler
 	/// <param name="eventData">mouse pointer event data</param>
 	public void OnDrag(PointerEventData eventData)
 	{
+		//	do not drag if clicking something
+		if (eventData.selectedObject != null)
+		{
+			return;
+		}
+
 		Vector2 currentMousePosition = eventData.position;
 		Vector2 diff = currentMousePosition - lastMousePosition;
 		RectTransform rect = GetComponent<RectTransform>();

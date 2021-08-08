@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 
@@ -16,12 +17,19 @@ public class PopUpPanel : MonoBehaviour
 	public delegate void PopUpPanelEvent(PopUpPanel sender);
 	public PopUpPanelEvent PanelDetroyed;
 
+	void Start()
+	{
+		if (CloseButton)
+		{
+			CloseButton.onClick.AddListener(ClosePopUp);
+		}
+	}
+
 	public void InitializePopUp(string popUpName = "", string popUpText = "", PopUpButtonProperties[] buttons = null, PopUpInputFieldProperties[] inputFields = null)
 	{
 		PanelName.text = popUpName;
 		PanelText.text = popUpText;
 
-		CloseButton.onClick.AddListener(ClosePopUp);
 
 		if (inputFields != null)
 		{
@@ -96,11 +104,23 @@ public class PopUpPanel : MonoBehaviour
 public class PopUpButtonProperties
 {
 	public string ButtonText;
-	public UnityEngine.Events.UnityAction Callback;
+	public UnityAction Callback;
+
+	public PopUpButtonProperties(string buttonText, UnityAction action)
+	{
+		ButtonText = buttonText;
+		Callback = action;
+	}
 }
 
 public class PopUpInputFieldProperties
 {
 	public string InactiveText;
-	public UnityEngine.Events.UnityAction<string> Callback;
+	public UnityAction<string> Callback;
+
+	public PopUpInputFieldProperties(string inactiveText, UnityAction<string> callback)
+	{
+		InactiveText = inactiveText;
+		Callback = callback;
+	}
 }

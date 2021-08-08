@@ -18,6 +18,11 @@ public static class GameCommands
 			return true;
 		}
 
+		if (ProcessHelpCommand(input, sender))
+		{
+			return true;
+		}
+
 		return false;
 	}
 
@@ -61,13 +66,34 @@ public static class GameCommands
 	{
 		GameCommand logOutCommand = new GameCommand(new string[] { "LOGOUT" }, (Object t) =>
 		{
-			InterfaceController.Instance.LogInScreen.gameObject.SetActive(true);
-			InterfaceController.Instance.LogInScreen.InitializeLogInScreen();
+			InterfaceController.Instance.LogOut();
 		});
 
 		if (logOutCommand.ProcessCommand(input))
 		{
 			logOutCommand.GameAction(null);
+			return true;
+		}
+
+		return false;
+	}
+
+	public static bool ProcessHelpCommand(string input, GameCommandInput sender)
+	{
+		GameCommand helpCommand = new GameCommand(new string[] { "HELP" }, (Object t) =>
+		{
+			string helpText = "Type a Command into a Command Input Field to open a new window or panel. \n"
+			+ "Command List: \n" +
+			"HELP: Open this window. \n" +
+			"LOGOUT: Log out of the game. \n" +
+			"NEW: Create a new panel. \n";
+
+			InterfaceController.Instance.CreateNewPopUp("Help", helpText, new PopUpButtonProperties[0]);
+		});
+
+		if (helpCommand.ProcessCommand(input))
+		{
+			helpCommand.GameAction(null);
 			return true;
 		}
 

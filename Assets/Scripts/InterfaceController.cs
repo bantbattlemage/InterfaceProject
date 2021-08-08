@@ -9,6 +9,7 @@ public class InterfaceController : MonoBehaviour
 	public GameObject HorizontalInterfaceGroupPrefab;
 	public GameObject VerticalInterfaceGroupPrefab;
 	public GameObject PopUpPanelPrefab;
+	public GameObject LogOutPopUpPrefab;
 
 	public Button NewPanelButton;
 	public LogInScreenController LogInScreen;
@@ -90,6 +91,23 @@ public class InterfaceController : MonoBehaviour
 	{
 		LogInScreen.gameObject.SetActive(false);
 		Debug.Log("Logged In");
+	}
+
+	public void LogOut()
+	{
+		GameObject logOutPopUpObject = Instantiate(LogOutPopUpPrefab, PopUpLayer);
+		PopUpPanel logOutPopUp = logOutPopUpObject.GetComponent<PopUpPanel>();
+		logOutPopUp.PopUpButtons[0].onClick.AddListener(() =>
+		{
+			LogInScreen.gameObject.SetActive(true);
+			LogInScreen.InitializeLogInScreen();
+			Debug.Log("Logged Out");
+			Destroy(logOutPopUpObject);
+		});
+		logOutPopUp.PopUpButtons[1].onClick.AddListener(() =>
+		{
+			Destroy(logOutPopUpObject);
+		});
 	}
 
 	public PopUpPanel CreateNewPopUp(string popUpName, string popUpText, PopUpButtonProperties[] buttons = null, PopUpInputFieldProperties[] inputFields = null)
