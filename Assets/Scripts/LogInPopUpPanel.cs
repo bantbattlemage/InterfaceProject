@@ -17,6 +17,22 @@ public class LogInPopUpPanel : PopUpPanel
 
 	void Start()
 	{
+		LogInField.onEndEdit.AddListener((text) =>
+		{
+			if (Input.GetKeyDown(KeyCode.Return))
+			{
+				OnLogInSubmit(LogInField.text, PasswordField.text);
+			}
+		});
+
+		PasswordField.onEndEdit.AddListener((text) =>
+		{
+			if (Input.GetKeyDown(KeyCode.Return))
+			{
+				OnLogInSubmit(LogInField.text, PasswordField.text);
+			}
+		});
+
 		CloseButton.onClick.AddListener(ClosePopUp);
 		LogInSubmitButton.onClick.AddListener(() => { OnLogInSubmit(LogInField.text, PasswordField.text); });
 		RegisterSubmitButton.onClick.AddListener(() => { OnLogInSubmit(LogInField.text, PasswordField.text); });
