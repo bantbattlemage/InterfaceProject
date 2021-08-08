@@ -47,13 +47,13 @@ public class InterfaceController : MonoBehaviour
 
 	void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.T))
-		{
-			PopUpInputFieldProperties inputField = new PopUpInputFieldProperties();
-			inputField.InactiveText = "Enter text...";
-			inputField.Callback = ((input) => { Debug.Log("Boop"); });
-			CreateNewPopUp("Test", "dickbutt", inputFields: new PopUpInputFieldProperties[] { inputField });
-		}
+		// if (Input.GetKeyDown(KeyCode.T))
+		// {
+		// 	PopUpInputFieldProperties inputField = new PopUpInputFieldProperties();
+		// 	inputField.InactiveText = "Enter text...";
+		// 	inputField.Callback = ((input) => { Debug.Log("Boop"); });
+		// 	CreateNewPopUp("Test", "dickbutt", inputFields: new PopUpInputFieldProperties[] { inputField });
+		// }
 	}
 
 	private void OnNewPanelButtonClicked()

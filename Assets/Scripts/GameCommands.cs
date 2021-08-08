@@ -8,28 +8,42 @@ public static class GameCommands
 	{
 		input = input.ToUpper();
 
-		//  NEW command to open a new panel
-		GameCommand newPanel = new GameCommand(new string[] { "NEW" }, (Object t) =>
+		if (ProcessNewPanelCommand(input, sender))
+		{
+			return true;
+		}
+
+		if (ProcessLogOutCommand(input, sender))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	public static bool ProcessNewPanelCommand(string input, GameCommandInput sender)
+	{
+		GameCommand newPanelCommand = new GameCommand(new string[] { "NEW" }, (Object t) =>
 		{
 			InterfaceController.Instance.CreateNewPanel((Transform)t);
 		});
 
-		if (newPanel.ProcessCommand(input))
+		if (newPanelCommand.ProcessCommand(input))
 		{
 			switch (sender.InputType)
 			{
 				case GameCommandInputType.CommandBar:
-					newPanel.GameAction(null);
+					newPanelCommand.GameAction(null);
 					break;
 				case GameCommandInputType.InterfacePanel:
 					InterfacePanelGroup group = sender.transform.parent.parent.GetComponent<InterfacePanel>().ParentPanelGroup;
 					if (group != null)
 					{
-						newPanel.GameAction(group.transform);
+						newPanelCommand.GameAction(group.transform);
 					}
 					else
 					{
-						newPanel.GameAction(null);
+						newPanelCommand.GameAction(null);
 					}
 
 					break;
@@ -37,6 +51,23 @@ public static class GameCommands
 					break;
 			}
 
+			return true;
+		}
+
+		return false;
+	}
+
+	public static bool ProcessLogOutCommand(string input, GameCommandInput sender)
+	{
+		GameCommand logOutCommand = new GameCommand(new string[] { "LOGOUT" }, (Object t) =>
+		{
+			InterfaceController.Instance.LogInScreen.gameObject.SetActive(true);
+			InterfaceController.Instance.LogInScreen.InitializeLogInScreen();
+		});
+
+		if (logOutCommand.ProcessCommand(input))
+		{
+			logOutCommand.GameAction(null);
 			return true;
 		}
 
