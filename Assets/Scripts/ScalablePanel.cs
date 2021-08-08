@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public enum ScaleMode { Top, Bottom, Left, Right, TopLeft, TopRight, BottomLeft, BottomRight };
+public enum ScaleMode { None, Top, Bottom, Left, Right, TopLeft, TopRight, BottomLeft, BottomRight };
 
 public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
-	public float MaxSize = 500;
-	public float MarginSize = 10;
+	private float MaxSize = 5000;
+	private float MarginSize = 10;
 
 	public Button Top;
 	public Button Bottom;
@@ -25,14 +25,43 @@ public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 	private LayoutElement _element;
 	private Vector2 _originalMousePosition;
 
+	private int _numberOfChildren = 0;
+	private bool _trackChildren;
+
 	void Start()
 	{
+		MaxSize = Screen.width * 2;
+
+
 		_element = GetComponent<LayoutElement>();
 		_buttons = new Button[] { Top, Bottom, Left, Right, TopLeft, TopRight, BottomLeft, BottomRight };
 
 		foreach (Button b in _buttons)
 		{
 			b.GetComponent<PanelScaleButton>().OnPanelScaleButtonMouseDown += OnPanelScaleButtonMousDown;
+		}
+
+		// _element.flexibleHeight = 0;
+		// _element.flexibleWidth = 0;
+		// _element.flexibleHeight = MaxSize / 2;
+		// _element.flexibleWidth = MaxSize / 2;
+		_element.flexibleHeight = MaxSize / 2;
+		_element.flexibleWidth = MaxSize / 2;
+		_element.preferredHeight = 0;
+		_element.preferredWidth = 0;
+
+		_trackChildren = true;
+	}
+
+	void Update()
+	{
+		if (_trackChildren)
+		{
+			if (transform.childCount != _numberOfChildren)
+			{
+				_numberOfChildren = transform.childCount;
+				Top.transform.parent.SetSiblingIndex(_numberOfChildren);
+			}
 		}
 	}
 
@@ -48,8 +77,6 @@ public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 		{
 			return;
 		}
-
-		Debug.Log("Begin drag " + _scaleMode.ToString());
 	}
 
 	public void OnDrag(PointerEventData eventData)
@@ -69,10 +96,10 @@ public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 				mouseDelta.y = -(_originalMousePosition.y - newMousePosition.y);
 				break;
 			case ScaleMode.Bottom:
-				mouseDelta.y = _originalMousePosition.y - newMousePosition.y;
+				mouseDelta.y = (_originalMousePosition.y - newMousePosition.y);
 				break;
 			case ScaleMode.Left:
-				mouseDelta.x = _originalMousePosition.x - newMousePosition.x;
+				mouseDelta.x = (_originalMousePosition.x - newMousePosition.x);
 				break;
 			case ScaleMode.Right:
 				mouseDelta.x = -(_originalMousePosition.x - newMousePosition.x);
@@ -85,20 +112,21 @@ public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 				break;
 			case ScaleMode.BottomRight:
 				break;
+			case ScaleMode.None:
+				return;
 		}
 
-		//Debug.Log(string.Format("({0}, {1})", mouseDelta.x, mouseDelta.y));
 		if (mouseDelta.x != 0)
 		{
-			scaleFactor.x = _element.flexibleWidth / MaxSize;  //(float)Math.Log((double)mouseDelta.x);
+			scaleFactor.x = _element.flexibleWidth / MaxSize;
 		}
 		if (mouseDelta.y != 0)
 		{
-			scaleFactor.y = _element.flexibleHeight / MaxSize; //(float)Math.Log((double)mouseDelta.y);
+			scaleFactor.y = _element.flexibleHeight / MaxSize;
 		}
 
-		mouseDelta.x *= 0.01f * scaleFactor.x;
-		mouseDelta.y *= 0.01f * scaleFactor.y;
+		mouseDelta.x *= 0.1f * scaleFactor.x;
+		mouseDelta.y *= scaleFactor.y;
 
 		_element.flexibleWidth += mouseDelta.x;
 		_element.flexibleHeight += mouseDelta.y;
@@ -119,48 +147,25 @@ public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 		{
 			_element.flexibleWidth = 1;
 		}
-
-		if (_element.preferredHeight >= MaxSize)
-		{
-			_element.preferredHeight = MaxSize;
-		}
-		else if (_element.preferredHeight <= 1)
-		{
-			_element.preferredHeight = 1;
-		}
-		if (_element.preferredWidth >= MaxSize)
-		{
-			_element.preferredWidth = MaxSize;
-		}
-		else if (_element.preferredWidth <= 1)
-		{
-			_element.preferredWidth = 1;
-		}
 	}
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
-		float height = _element.flexibleHeight / MaxSize;
-		float width = _element.flexibleWidth / MaxSize;
-
-		// _element.flexibleWidth = 10 * width;
-		// _element.flexibleHeight = 10 * height;
-
-		// if (_element.flexibleHeight >= MaxSize)
-		// {
-		// 	_element.flexibleHeight = MaxSize - MarginSize;
-		// }
-		// else if (_element.flexibleHeight <= 1)
-		// {
-		// 	_element.flexibleHeight = MarginSize;
-		// }
-		// if (_element.flexibleWidth >= MaxSize)
-		// {
-		// 	_element.flexibleWidth = MaxSize - MarginSize;
-		// }
-		// else if (_element.flexibleWidth <= 1)
-		// {
-		// 	_element.flexibleWidth = MarginSize;
-		// }
+		if (_element.flexibleHeight >= MaxSize)
+		{
+			_element.flexibleHeight = MaxSize - MarginSize;
+		}
+		else if (_element.flexibleHeight <= 1)
+		{
+			_element.flexibleHeight = MarginSize;
+		}
+		if (_element.flexibleWidth >= MaxSize)
+		{
+			_element.flexibleWidth = MaxSize - MarginSize;
+		}
+		else if (_element.flexibleWidth <= 1)
+		{
+			_element.flexibleWidth = MarginSize;
+		}
 	}
 }
