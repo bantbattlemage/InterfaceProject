@@ -28,10 +28,9 @@ public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 	private int _numberOfChildren = 0;
 	private bool _trackChildren;
 
-	void Start()
+	void Awake()
 	{
 		MaxSize = Screen.width * 2;
-
 
 		_element = GetComponent<LayoutElement>();
 		_buttons = new Button[] { Top, Bottom, Left, Right, TopLeft, TopRight, BottomLeft, BottomRight };
@@ -51,6 +50,14 @@ public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 		_element.preferredWidth = 0;
 
 		_trackChildren = true;
+	}
+
+	public void ResetScale()
+	{
+		_element.flexibleHeight = MaxSize / 2;
+		_element.flexibleWidth = MaxSize / 2;
+		_element.preferredHeight = 0;
+		_element.preferredWidth = 0;
 	}
 
 	void Update()
@@ -124,6 +131,8 @@ public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 		{
 			scaleFactor.y = _element.flexibleHeight / MaxSize;
 		}
+
+		Debug.Log(mouseDelta);
 
 		mouseDelta.x *= 0.1f * scaleFactor.x;
 		mouseDelta.y *= scaleFactor.y;

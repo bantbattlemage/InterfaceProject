@@ -31,6 +31,7 @@ public class InterfacePanel : MonoBehaviour
 	{
 		transform.SetParent(panelGroup.transform);
 		ParentPanelGroup = panelGroup;
+		gameObject.GetComponent<ScalablePanel>().ResetScale();
 	}
 
 	public void SetToRoot()
@@ -49,6 +50,7 @@ public class InterfacePanel : MonoBehaviour
 
 		InterfaceController.Instance.RootLevelPanels.Add(this);
 		transform.SetParent(InterfaceController.Instance.Body);
+		gameObject.GetComponent<ScalablePanel>().ResetScale();
 	}
 
 	public void OnCloseButtonClicked()
