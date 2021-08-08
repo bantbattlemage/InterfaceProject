@@ -1941,7 +1941,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: bbeba1f9c5f88244c84e02fe3f44e4cf, type: 3}
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 32
     m_FontStyle: 0
     m_BestFit: 1
@@ -2831,6 +2831,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d991cb8af0224e3438de1d077de16c5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FreeFloating: 0
   Top: {fileID: 8395162642091041710}
   Bottom: {fileID: 1601405005402947111}
   Left: {fileID: 242769423231855850}

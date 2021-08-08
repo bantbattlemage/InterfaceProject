@@ -46,17 +46,6 @@ public class InterfaceController : MonoBehaviour
 		LogInScreen.OnSuccessfulLogin += LogIn;
 	}
 
-	void Update()
-	{
-		// if (Input.GetKeyDown(KeyCode.T))
-		// {
-		// 	PopUpInputFieldProperties inputField = new PopUpInputFieldProperties();
-		// 	inputField.InactiveText = "Enter text...";
-		// 	inputField.Callback = ((input) => { Debug.Log("Boop"); });
-		// 	CreateNewPopUp("Test", "dickbutt", inputFields: new PopUpInputFieldProperties[] { inputField });
-		// }
-	}
-
 	private void OnNewPanelButtonClicked()
 	{
 		CreateNewPanel(Body);
@@ -90,6 +79,8 @@ public class InterfaceController : MonoBehaviour
 	public void LogIn()
 	{
 		LogInScreen.gameObject.SetActive(false);
+		GameCommands.ProcessHelpCommand("HELP", null);
+
 		Debug.Log("Logged In");
 	}
 

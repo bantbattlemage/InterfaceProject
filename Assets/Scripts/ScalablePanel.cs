@@ -8,6 +8,7 @@ public enum ScaleMode { None, Top, Bottom, Left, Right, TopLeft, TopRight, Botto
 
 public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
+	public bool FreeFloating = false;
 	private float MaxSize = 5000;
 	private float MarginSize = 10;
 
@@ -26,12 +27,10 @@ public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 	private Vector2 _originalMousePosition;
 
 	private int _numberOfChildren = 0;
-	private bool _trackChildren;
+	private bool _trackChildren = true;
 
 	void Awake()
 	{
-		MaxSize = Screen.width * 2;
-
 		_element = GetComponent<LayoutElement>();
 		_buttons = new Button[] { Top, Bottom, Left, Right, TopLeft, TopRight, BottomLeft, BottomRight };
 
@@ -40,16 +39,18 @@ public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 			b.GetComponent<PanelScaleButton>().OnPanelScaleButtonMouseDown += OnPanelScaleButtonMousDown;
 		}
 
-		// _element.flexibleHeight = 0;
-		// _element.flexibleWidth = 0;
-		// _element.flexibleHeight = MaxSize / 2;
-		// _element.flexibleWidth = MaxSize / 2;
-		_element.flexibleHeight = MaxSize / 2;
-		_element.flexibleWidth = MaxSize / 2;
-		_element.preferredHeight = 0;
-		_element.preferredWidth = 0;
-
-		_trackChildren = true;
+		if (FreeFloating)
+		{
+			MaxSize = Screen.height * 0.75f;
+		}
+		else
+		{
+			MaxSize = Screen.width * 2;
+			_element.flexibleHeight = MaxSize / 2;
+			_element.flexibleWidth = MaxSize / 2;
+			_element.preferredHeight = 0;
+			_element.preferredWidth = 0;
+		}
 	}
 
 	public void ResetScale()
@@ -112,54 +113,103 @@ public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 				mouseDelta.x = -(_originalMousePosition.x - newMousePosition.x);
 				break;
 			case ScaleMode.TopLeft:
+				mouseDelta.y = -(_originalMousePosition.y - newMousePosition.y);
+				mouseDelta.x = (_originalMousePosition.x - newMousePosition.x);
 				break;
 			case ScaleMode.TopRight:
+				mouseDelta.y = -(_originalMousePosition.y - newMousePosition.y);
+				mouseDelta.x = -(_originalMousePosition.x - newMousePosition.x);
 				break;
 			case ScaleMode.BottomLeft:
+				mouseDelta.x = (_originalMousePosition.x - newMousePosition.x);
+				mouseDelta.y = (_originalMousePosition.y - newMousePosition.y);
 				break;
 			case ScaleMode.BottomRight:
+				mouseDelta.x = -(_originalMousePosition.x - newMousePosition.x);
+				mouseDelta.y = (_originalMousePosition.y - newMousePosition.y);
 				break;
 			case ScaleMode.None:
 				return;
 		}
 
-		if (mouseDelta.x != 0)
+		if (FreeFloating)
 		{
-			scaleFactor.x = _element.flexibleWidth / MaxSize;
-		}
-		if (mouseDelta.y != 0)
-		{
-			scaleFactor.y = _element.flexibleHeight / MaxSize;
-		}
+			RectTransform rect = GetComponent<RectTransform>();
 
-		Debug.Log(mouseDelta);
+			if (mouseDelta.x != 0)
+			{
+				scaleFactor.x = rect.sizeDelta.x / MaxSize;
+			}
+			if (mouseDelta.y != 0)
+			{
+				scaleFactor.y = rect.sizeDelta.y / MaxSize;
+			}
 
-		mouseDelta.x *= 0.1f * scaleFactor.x;
-		mouseDelta.y *= scaleFactor.y;
+			mouseDelta.x *= 0.05f * scaleFactor.x;
+			mouseDelta.y *= 0.05f * scaleFactor.y;
 
-		_element.flexibleWidth += mouseDelta.x;
-		_element.flexibleHeight += mouseDelta.y;
+			rect.sizeDelta += new Vector2(mouseDelta.x, mouseDelta.y);
 
-		if (_element.flexibleHeight >= MaxSize)
-		{
-			_element.flexibleHeight = MaxSize;
+			if (rect.sizeDelta.x > MaxSize)
+			{
+				rect.sizeDelta = new Vector2(MaxSize, rect.sizeDelta.y);
+			}
+			if (rect.sizeDelta.y > MaxSize)
+			{
+				rect.sizeDelta = new Vector2(rect.sizeDelta.x, MaxSize);
+			}
+			if (rect.sizeDelta.x <= MaxSize / 10)
+			{
+				rect.sizeDelta = new Vector2(MaxSize / 10, rect.sizeDelta.y);
+			}
+			if (rect.sizeDelta.y <= MaxSize / 10)
+			{
+				rect.sizeDelta = new Vector2(rect.sizeDelta.x, MaxSize / 10);
+			}
 		}
-		else if (_element.flexibleHeight <= 1)
+		else
 		{
-			_element.flexibleHeight = 1;
-		}
-		if (_element.flexibleWidth >= MaxSize)
-		{
-			_element.flexibleWidth = MaxSize;
-		}
-		else if (_element.flexibleWidth <= 1)
-		{
-			_element.flexibleWidth = 1;
+			if (mouseDelta.x != 0)
+			{
+				scaleFactor.x = _element.flexibleWidth / MaxSize;
+			}
+			if (mouseDelta.y != 0)
+			{
+				scaleFactor.y = _element.flexibleHeight / MaxSize;
+			}
+
+			mouseDelta.x *= 0.1f * scaleFactor.x;
+			mouseDelta.y *= scaleFactor.y;
+
+			_element.flexibleWidth += mouseDelta.x;
+			_element.flexibleHeight += mouseDelta.y;
+
+			if (_element.flexibleHeight >= MaxSize)
+			{
+				_element.flexibleHeight = MaxSize;
+			}
+			else if (_element.flexibleHeight <= 1)
+			{
+				_element.flexibleHeight = 1;
+			}
+			if (_element.flexibleWidth >= MaxSize)
+			{
+				_element.flexibleWidth = MaxSize;
+			}
+			else if (_element.flexibleWidth <= 1)
+			{
+				_element.flexibleWidth = 1;
+			}
 		}
 	}
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
+		if (FreeFloating)
+		{
+			return;
+		}
+
 		if (_element.flexibleHeight >= MaxSize)
 		{
 			_element.flexibleHeight = MaxSize - MarginSize;
