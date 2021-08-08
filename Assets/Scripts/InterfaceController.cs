@@ -38,9 +38,17 @@ public class InterfaceController : MonoBehaviour
 	{
 		//	Assign button callbacks
 		NewPanelButton.onClick.AddListener(OnNewPanelButtonClicked);
+	}
 
-		CreateNewPanel();
-		CreateNewPopUp("Test", "dickbutt");
+	void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.T))
+		{
+			PopUpInputFieldProperties inputField = new PopUpInputFieldProperties();
+			inputField.InactiveText = "Enter text...";
+			inputField.Callback = ((input) => { Debug.Log("Boop"); });
+			CreateNewPopUp("Test", "dickbutt", inputFields: new PopUpInputFieldProperties[] { inputField });
+		}
 	}
 
 	private void OnNewPanelButtonClicked()
@@ -73,11 +81,11 @@ public class InterfaceController : MonoBehaviour
 		ActivePopUpPanels.Remove(sender);
 	}
 
-	public PopUpPanel CreateNewPopUp(string popUpName, string popUpText, PopUpButtonProperties[] buttons = null)
+	public PopUpPanel CreateNewPopUp(string popUpName, string popUpText, PopUpButtonProperties[] buttons = null, PopUpInputFieldProperties[] inputFields = null)
 	{
 		GameObject newPopUpObject = Instantiate(PopUpPanelPrefab, PopUpLayer);
 		PopUpPanel newPopUpPanel = newPopUpObject.GetComponent<PopUpPanel>();
-		newPopUpPanel.InitializePopUp(popUpName, popUpText, buttons);
+		newPopUpPanel.InitializePopUp(popUpName, popUpText, buttons, inputFields);
 		newPopUpPanel.PanelDetroyed += OnPopUpPanelDestroyed;
 		ActivePopUpPanels.Add(newPopUpPanel);
 
