@@ -600,7 +600,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 1}
+  m_Color: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 0.78431374}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2770,8 +2770,8 @@ GameObject:
   - component: {fileID: 3547740209760440166}
   - component: {fileID: 9118023400931267884}
   - component: {fileID: 9118023400931267885}
-  - component: {fileID: 6172516592054023050}
-  - component: {fileID: 3681513228631127300}
+  - component: {fileID: 2096571324223772602}
+  - component: {fileID: 513669985298778619}
   m_Layer: 5
   m_Name: InterfacePanel
   m_TagString: Untagged
@@ -2886,7 +2886,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!222 &6172516592054023050
+--- !u!222 &2096571324223772602
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2894,7 +2894,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9118023400931267880}
   m_CullTransparentMesh: 1
---- !u!114 &3681513228631127300
+--- !u!114 &513669985298778619
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2907,7 +2907,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.78431374}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
