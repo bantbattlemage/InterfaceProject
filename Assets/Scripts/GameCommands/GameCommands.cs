@@ -48,17 +48,17 @@ public static class GameCommands
 			switch (sender.InputType)
 			{
 				case GameCommandInputType.CommandBar:
-					command.GameAction(null);
+					command.CommandAction(null);
 					break;
 				case GameCommandInputType.InterfacePanel:
 					InterfacePanelGroup group = sender.transform.parent.parent.GetComponent<InterfacePanel>().ParentPanelGroup;
 					if (group != null)
 					{
-						command.GameAction(group.transform);
+						command.CommandAction(group.transform);
 					}
 					else
 					{
-						command.GameAction(null);
+						command.CommandAction(null);
 					}
 
 					break;
@@ -81,7 +81,7 @@ public static class GameCommands
 
 		if (command.ProcessCommand(input))
 		{
-			command.GameAction(null);
+			command.CommandAction(null);
 			return true;
 		}
 
@@ -105,7 +105,7 @@ public static class GameCommands
 
 		if (command.ProcessCommand(input))
 		{
-			command.GameAction(null);
+			command.CommandAction(null);
 			return true;
 		}
 
@@ -125,12 +125,12 @@ public static class GameCommands
 			{
 				if (sender.transform.parent.parent.GetComponent<InterfacePanel>())
 				{
-					command.GameAction(sender.transform.parent.parent);
+					command.CommandAction(sender.transform.parent.parent);
 				}
 			}
 			else
 			{
-				command.GameAction(null);
+				command.CommandAction(null);
 			}
 
 			return true;
@@ -152,12 +152,12 @@ public static class GameCommands
             {
                 if (sender.transform.parent.parent.GetComponent<InterfacePanel>())
                 {
-                    command.GameAction(sender.transform.parent.parent);
+                    command.CommandAction(sender.transform.parent.parent);
                 }
             }
             else
             {
-                command.GameAction(null);
+                command.CommandAction(null);
             }
 
             return true;
@@ -165,28 +165,4 @@ public static class GameCommands
 
         return false;
     }
-}
-
-public class GameCommand
-{
-	public string[] ValidInputs { get; private set; }
-	public System.Action<Object> GameAction { get; private set; }
-
-	public GameCommand(string[] validInputs, System.Action<Object> gameAction)
-	{
-		ValidInputs = validInputs;
-		GameAction = gameAction;
-	}
-
-	public bool ProcessCommand(string input)
-	{
-		if (ValidInputs.Any(x => x == input))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
 }
