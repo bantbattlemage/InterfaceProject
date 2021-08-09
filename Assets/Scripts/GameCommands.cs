@@ -96,9 +96,11 @@ public static class GameCommands
 			+ "Command List: \n" +
 			"HELP: Open this window. \n" +
 			"LOGOUT: Log out of the game. \n" +
-			"NEW: Create a new panel. \n";
+			"NEW: Create a new panel. \n" +
+			"MARKET, MKT: Open the market. \n" +
+			"MAP: Open the map. \n";
 
-			InterfaceController.Instance.CreateNewPopUp("Help", helpText, new PopUpButtonProperties[0]);
+            InterfaceController.Instance.CreateNewPopUp("Help", helpText, new PopUpButtonProperties[0]);
 		});
 
 		if (command.ProcessCommand(input))

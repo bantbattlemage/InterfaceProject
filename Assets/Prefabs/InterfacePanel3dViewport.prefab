@@ -1111,7 +1111,7 @@ GameObject:
   - component: {fileID: 6478223166065398807}
   - component: {fileID: 4890677227666770518}
   m_Layer: 5
-  m_Name: 3dViewportInterfacePanel
+  m_Name: InterfacePanel3dViewport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
