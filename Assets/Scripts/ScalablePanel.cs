@@ -36,7 +36,7 @@ public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
 		foreach (Button b in _buttons)
 		{
-			b.GetComponent<PanelScaleButton>().OnPanelScaleButtonMouseDown += OnPanelScaleButtonMousDown;
+			b.GetComponent<PanelScaleButton>().OnPanelScaleButtonMouseDown += OnPanelScaleButtonMouseDown;
 		}
 
 		if (FreeFloating)
@@ -73,7 +73,7 @@ public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 		}
 	}
 
-	private void OnPanelScaleButtonMousDown(ScaleMode scaleMode, PointerEventData eventData)
+	private void OnPanelScaleButtonMouseDown(ScaleMode scaleMode, PointerEventData eventData)
 	{
 		_scaleMode = scaleMode;
 		_originalMousePosition = eventData.position;

@@ -124,7 +124,13 @@ public class InterfaceController : MonoBehaviour
 		MarketInterfacePanel panel = newPanel.GetComponent<MarketInterfacePanel>();
 
 		RegisterPanelButtonEvents(panel);
+		ReplacePanel(panel, parent);
 
+		return panel;
+	}
+
+	public void ReplacePanel(InterfacePanel newPanel, Transform parent)
+	{
 		InterfacePanel parentPanel = parent.GetComponent<InterfacePanel>();
 		if (parentPanel != null)
 		{
@@ -132,19 +138,17 @@ public class InterfaceController : MonoBehaviour
 
 			if (parentPanel.ParentPanelGroup != null)
 			{
-				parentPanel.ParentPanelGroup.InsertPanel(panel);
+				parentPanel.ParentPanelGroup.InsertPanel(newPanel);
 				DestroyPanel(parentPanel);
 			}
 			else
 			{
-				panel.SetToRoot();
+				newPanel.SetToRoot();
 				DestroyPanel(parentPanel);
 			}
 
-			panel.transform.SetSiblingIndex(siblingIndex);
+			newPanel.transform.SetSiblingIndex(siblingIndex);
 		}
-
-		return panel;
 	}
 
 	public InterfacePanel CreateNewPanel(Transform parent = null)
