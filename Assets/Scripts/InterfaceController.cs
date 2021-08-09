@@ -11,8 +11,9 @@ public class InterfaceController : MonoBehaviour
 	public GameObject PopUpPanelPrefab;
 	public GameObject LogOutPopUpPrefab;
 	public GameObject MarketPanelPrefab;
+    public GameObject MapPanelPrefab;
 
-	public Button NewPanelButton;
+    public Button NewPanelButton;
 	public LogInScreenController LogInScreen;
 
 	public Transform Body;
@@ -123,11 +124,41 @@ public class InterfaceController : MonoBehaviour
 		GameObject newPanel = Instantiate(MarketPanelPrefab, parent);
 		MarketInterfacePanel panel = newPanel.GetComponent<MarketInterfacePanel>();
 
-		RegisterPanelButtonEvents(panel);
-		ReplacePanel(panel, parent);
+        RegisterPanelButtonEvents(panel);
 
-		return panel;
+        if (parent == Body)
+        {
+            RootLevelPanels.Add(panel);
+        }
+
+        ReplacePanel(panel, parent);
+
+        return panel;
 	}
+
+
+    public MapInterfacePanel CreateMapPanel(Transform parent = null, string targetItem = "")
+    {
+        if (parent == null)
+        {
+            parent = Body;
+        }
+
+        GameObject newPanel = Instantiate(MapPanelPrefab, parent);
+        MapInterfacePanel panel = newPanel.GetComponent<MapInterfacePanel>();
+        panel.Initialize();
+
+        RegisterPanelButtonEvents(panel);
+
+        if (parent == Body)
+        {
+            RootLevelPanels.Add(panel);
+        }
+
+        ReplacePanel(panel, parent);
+
+        return panel;
+    }
 
 	public void ReplacePanel(InterfacePanel newPanel, Transform parent)
 	{

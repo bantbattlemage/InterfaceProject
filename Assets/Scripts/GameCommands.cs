@@ -28,6 +28,11 @@ public static class GameCommands
 			return true;
 		}
 
+        if (ProcessMapCommand(input, sender))
+        {
+            return true;
+        }
+
 		return false;
 	}
 
@@ -131,6 +136,33 @@ public static class GameCommands
 
 		return false;
 	}
+
+    public static bool ProcessMapCommand(string input, GameCommandInput sender)
+    {
+        GameCommand command = new GameCommand(new string[] { "MAP" }, (Object t) =>
+        {
+            InterfaceController.Instance.CreateMapPanel((Transform)t);
+        });
+
+        if (command.ProcessCommand(input))
+        {
+            if (sender.InputType == GameCommandInputType.InterfacePanel)
+            {
+                if (sender.transform.parent.parent.GetComponent<InterfacePanel>())
+                {
+                    command.GameAction(sender.transform.parent.parent);
+                }
+            }
+            else
+            {
+                command.GameAction(null);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
 }
 
 public class GameCommand
