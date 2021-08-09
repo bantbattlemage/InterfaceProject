@@ -10,6 +10,7 @@ public class InterfaceController : MonoBehaviour
 	public GameObject VerticalInterfaceGroupPrefab;
 	public GameObject PopUpPanelPrefab;
 	public GameObject LogOutPopUpPrefab;
+	public GameObject MarketPanelPrefab;
 
 	public Button NewPanelButton;
 	public LogInScreenController LogInScreen;
@@ -112,6 +113,40 @@ public class InterfaceController : MonoBehaviour
 		return newPopUpPanel;
 	}
 
+	public MarketInterfacePanel CreateMarketPanel(Transform parent = null, string targetItem = "")
+	{
+		if (parent == null)
+		{
+			parent = Body;
+		}
+
+		GameObject newPanel = Instantiate(MarketPanelPrefab, parent);
+		MarketInterfacePanel panel = newPanel.GetComponent<MarketInterfacePanel>();
+
+		RegisterPanelButtonEvents(panel);
+
+		InterfacePanel parentPanel = parent.GetComponent<InterfacePanel>();
+		if (parentPanel != null)
+		{
+			int siblingIndex = parent.transform.GetSiblingIndex();
+
+			if (parentPanel.ParentPanelGroup != null)
+			{
+				parentPanel.ParentPanelGroup.InsertPanel(panel);
+				DestroyPanel(parentPanel);
+			}
+			else
+			{
+				panel.SetToRoot();
+				DestroyPanel(parentPanel);
+			}
+
+			panel.transform.SetSiblingIndex(siblingIndex);
+		}
+
+		return panel;
+	}
+
 	public InterfacePanel CreateNewPanel(Transform parent = null)
 	{
 		if (parent == null)
@@ -134,11 +169,16 @@ public class InterfaceController : MonoBehaviour
 			parentGroup.InsertPanel(panel);
 		}
 
+		RegisterPanelButtonEvents(panel);
+
+		return panel;
+	}
+
+	public void RegisterPanelButtonEvents(InterfacePanel panel)
+	{
 		panel.PanelCloseButtonClicked += OnPanelCloseButtonClicked;
 		panel.PanelSplitHorizontalButtonClicked += OnPanelHorizontalSplitButtonClicked;
 		panel.PanelSplitVerticalButtonClicked += OnPanelVerticalSplitButtonClicked;
-
-		return panel;
 	}
 
 	public InterfacePanel CreateNewPanel(InterfacePanelGroup parent)

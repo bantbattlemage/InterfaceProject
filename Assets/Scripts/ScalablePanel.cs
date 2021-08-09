@@ -171,14 +171,14 @@ public class ScalablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 		{
 			if (mouseDelta.x != 0)
 			{
-				scaleFactor.x = _element.flexibleWidth / MaxSize;
+				scaleFactor.x = 0.5f * (_element.flexibleWidth / MaxSize);
 			}
 			if (mouseDelta.y != 0)
 			{
-				scaleFactor.y = _element.flexibleHeight / MaxSize;
+				scaleFactor.y = 0.5f * (_element.flexibleHeight / MaxSize);
 			}
 
-			mouseDelta.x *= 0.1f * scaleFactor.x;
+			mouseDelta.x *= scaleFactor.x;
 			mouseDelta.y *= scaleFactor.y;
 
 			_element.flexibleWidth += mouseDelta.x;

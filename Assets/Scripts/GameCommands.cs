@@ -23,32 +23,37 @@ public static class GameCommands
 			return true;
 		}
 
+		if (ProcessMarketCommand(input, sender))
+		{
+			return true;
+		}
+
 		return false;
 	}
 
 	public static bool ProcessNewPanelCommand(string input, GameCommandInput sender)
 	{
-		GameCommand newPanelCommand = new GameCommand(new string[] { "NEW" }, (Object t) =>
+		GameCommand command = new GameCommand(new string[] { "NEW" }, (Object t) =>
 		{
 			InterfaceController.Instance.CreateNewPanel((Transform)t);
 		});
 
-		if (newPanelCommand.ProcessCommand(input))
+		if (command.ProcessCommand(input))
 		{
 			switch (sender.InputType)
 			{
 				case GameCommandInputType.CommandBar:
-					newPanelCommand.GameAction(null);
+					command.GameAction(null);
 					break;
 				case GameCommandInputType.InterfacePanel:
 					InterfacePanelGroup group = sender.transform.parent.parent.GetComponent<InterfacePanel>().ParentPanelGroup;
 					if (group != null)
 					{
-						newPanelCommand.GameAction(group.transform);
+						command.GameAction(group.transform);
 					}
 					else
 					{
-						newPanelCommand.GameAction(null);
+						command.GameAction(null);
 					}
 
 					break;
@@ -64,14 +69,14 @@ public static class GameCommands
 
 	public static bool ProcessLogOutCommand(string input, GameCommandInput sender)
 	{
-		GameCommand logOutCommand = new GameCommand(new string[] { "LOGOUT" }, (Object t) =>
+		GameCommand command = new GameCommand(new string[] { "LOGOUT", "OUT" }, (Object t) =>
 		{
 			InterfaceController.Instance.LogOut();
 		});
 
-		if (logOutCommand.ProcessCommand(input))
+		if (command.ProcessCommand(input))
 		{
-			logOutCommand.GameAction(null);
+			command.GameAction(null);
 			return true;
 		}
 
@@ -80,7 +85,7 @@ public static class GameCommands
 
 	public static bool ProcessHelpCommand(string input, GameCommandInput sender)
 	{
-		GameCommand helpCommand = new GameCommand(new string[] { "HELP" }, (Object t) =>
+		GameCommand command = new GameCommand(new string[] { "HELP", "HLP" }, (Object t) =>
 		{
 			string helpText = "Type a Command into a Command Input Field to open a new window or panel. \n"
 			+ "Command List: \n" +
@@ -91,9 +96,36 @@ public static class GameCommands
 			InterfaceController.Instance.CreateNewPopUp("Help", helpText, new PopUpButtonProperties[0]);
 		});
 
-		if (helpCommand.ProcessCommand(input))
+		if (command.ProcessCommand(input))
 		{
-			helpCommand.GameAction(null);
+			command.GameAction(null);
+			return true;
+		}
+
+		return false;
+	}
+
+	public static bool ProcessMarketCommand(string input, GameCommandInput sender)
+	{
+		GameCommand command = new GameCommand(new string[] { "MARKET", "MKT" }, (Object t) =>
+		{
+			InterfaceController.Instance.CreateMarketPanel((Transform)t);
+		});
+
+		if (command.ProcessCommand(input))
+		{
+			if (sender.InputType == GameCommandInputType.InterfacePanel)
+			{
+				if (sender.transform.parent.parent.GetComponent<InterfacePanel>())
+				{
+					command.GameAction(sender.transform.parent.parent);
+				}
+			}
+			else
+			{
+				command.GameAction(null);
+			}
+
 			return true;
 		}
 
