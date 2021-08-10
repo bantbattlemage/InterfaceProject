@@ -9,8 +9,8 @@ public class GameController : MonoBehaviour
 
 	public PlayerController Player { get; private set; }
 
-	private GameController _instance;
-	public GameController Instance
+	private static GameController _instance;
+	public static GameController Instance
 	{
 		get
 		{
@@ -29,18 +29,9 @@ public class GameController : MonoBehaviour
 		Player = newPlayerObject.GetComponent<PlayerController>();
 		Player.Initialize();
 
-		StartCoroutine(RestWebClient.Instance.HttpGet(ServerURL, (r) => OnRequestComplete(r)));
-	}
-
-	void OnRequestComplete(Response response)
-	{
-		Debug.Log($"Status Code: {response.StatusCode}");
-		Debug.Log($"Data: {response.Data}");
-		Debug.Log($"Error: {response.Error}");
-	}
-
-	void OnGet(string result)
-	{
-		Debug.Log(result);
+		StartCoroutine(RestWebClient.Instance.HttpGet(GameController.Instance.ServerURL + "player/", (r) =>
+		{
+			Debug.Log(r.Data);
+		}));
 	}
 }
