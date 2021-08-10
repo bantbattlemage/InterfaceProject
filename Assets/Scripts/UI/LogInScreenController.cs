@@ -20,36 +20,21 @@ public class LogInScreenController : MonoBehaviour
 
 	public void SubmitLogInRequest(string userName, string password)
 	{
-		// StartCoroutine(RestWebClient.Instance.HttpGet(GameController.Instance.ServerURL, (r) =>
-		// {
-		// 	PlayerData p = JsonUtility.FromJson<PlayerData>(r.Data);
-
-		// 	LogInPopUp.ClosePopUp();
-		// 	OnSuccessfulLogin();
-		// }));
-
 		LogInRequest request = new LogInRequest() { Username = userName };
 		string jsonRequest = JsonUtility.ToJson(request);
-		string appendedURL = GameController.Instance.ServerURL + "login/";
-		Debug.Log(jsonRequest);
-		Debug.Log(appendedURL);
-
-		RequestHeader header = new RequestHeader
-		{
-			Key = "Content-Type",
-			Value = "application/json"
-		};
+		string appendedURL = $"{GameController.Instance.ServerURL}{"login/"}";
 
 		StartCoroutine(RestWebClient.Instance.HttpPost(appendedURL, jsonRequest, (r) =>
 		{
-			Debug.Log(r.Data);
-
-			if (r.Data.Equals("true"))
+			if(r.Error != null)
+			{
+				Debug.LogWarning(r.Error);
+			}
+			else if ( r.Data.Equals("true"))
 			{
 				LogInPopUp.ClosePopUp();
 				OnSuccessfulLogin();
 			}
-
-		}, new List<RequestHeader> { header }));
+		}));
 	}
 }

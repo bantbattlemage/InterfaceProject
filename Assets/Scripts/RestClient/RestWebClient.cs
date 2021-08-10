@@ -67,6 +67,18 @@ namespace RestClient.Core
 		{
 			using (UnityWebRequest webRequest = UnityWebRequest.Post(url, body))
 			{
+				if (headers == null)
+				{
+					headers = new List<RequestHeader>()
+					{
+						new RequestHeader
+						{
+							Key = "Content-Type",
+							Value = "application/json"
+						}
+					};
+				}
+
 				if (headers != null)
 				{
 					foreach (RequestHeader header in headers)
@@ -88,8 +100,7 @@ namespace RestClient.Core
 						Error = webRequest.error
 					});
 				}
-
-				if (webRequest.isDone)
+				else if (webRequest.isDone)
 				{
 					string data = System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data);
 					callback(new Response
