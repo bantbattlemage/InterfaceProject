@@ -14,6 +14,7 @@ public class LogInPopUpPanel : PopUpPanel
 
 	public delegate void LogInRequestEvent(string userName, string password);
 	public LogInRequestEvent LogInSubmit;
+	public LogInRequestEvent RegisterSubmit;
 
 	void Start()
 	{
@@ -35,11 +36,16 @@ public class LogInPopUpPanel : PopUpPanel
 
 		CloseButton.onClick.AddListener(ClosePopUp);
 		LogInSubmitButton.onClick.AddListener(() => { OnLogInSubmit(LogInField.text, PasswordField.text); });
-		RegisterSubmitButton.onClick.AddListener(() => { OnLogInSubmit(LogInField.text, PasswordField.text); });
+		RegisterSubmitButton.onClick.AddListener(() => { OnRegisterSubmit(LogInField.text, PasswordField.text); });
 	}
 
 	public void OnLogInSubmit(string userName, string password)
 	{
 		LogInSubmit(userName, password);
+	}
+
+	public void OnRegisterSubmit(string userName, string password)
+	{
+		RegisterSubmit(userName, password);
 	}
 }

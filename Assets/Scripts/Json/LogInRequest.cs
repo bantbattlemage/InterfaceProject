@@ -1,8 +1,10 @@
-using System;
 using Newtonsoft.Json;
 
-[JsonObject, Serializable]
+[JsonObject]
+[System.Serializable]
 public class LogInRequest
 {
 	public string Username;
+	public string Password;
+	public bool NewRegistration;
 }

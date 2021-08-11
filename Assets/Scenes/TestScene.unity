@@ -446,7 +446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a885eaa1959e45479c92097a007e12a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ServerURL: https://localhost:44392/api/
+  ServerURL: https://localhost:5001/api/
   PlayerControllerPrefab: {fileID: 2819174900333566211, guid: 9649c8c118c95d642969909333be2234, type: 3}
 --- !u!4 &1111227957
 Transform:
