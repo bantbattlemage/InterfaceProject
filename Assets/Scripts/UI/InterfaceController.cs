@@ -103,7 +103,7 @@ public class InterfaceController : MonoBehaviour
 		});
 	}
 
-	public PopUpPanel CreateNewPopUp(string popUpName, string popUpText, PopUpButtonProperties[] buttons = null, PopUpInputFieldProperties[] inputFields = null)
+	public PopUpPanel CreateNewPopUp(string popUpName = "", string popUpText = "", PopUpButtonProperties[] buttons = null, PopUpInputFieldProperties[] inputFields = null)
 	{
 		GameObject newPopUpObject = Instantiate(PopUpPanelPrefab, PopUpLayer);
 		PopUpPanel newPopUpPanel = newPopUpObject.GetComponent<PopUpPanel>();
