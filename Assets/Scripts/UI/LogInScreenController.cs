@@ -58,15 +58,15 @@ public class LogInScreenController : MonoBehaviour
 		}));
 	}
 
-	public void SubmitLogInRequest(string userName, string password)
+	public void SubmitLogInRequest(string userName, string password, string email)
 	{
-		LogInRequest request = new LogInRequest() { Username = userName, Password = password, NewRegistration = false };
+		LogInRequest request = new LogInRequest() { Username = userName, Password = password, Email = email, NewRegistration = false };
 		ProcessLogInRequest(request);
 	}
 
-	public void SubmitRegisterNewAccountRequest(string userName, string password)
+	public void SubmitRegisterNewAccountRequest(string userName, string password, string email)
 	{
-		LogInRequest request = new LogInRequest() { Username = userName, Password = password, NewRegistration = true };
+		LogInRequest request = new LogInRequest() { Username = userName, Password = password, Email = email, NewRegistration = true };
 		ProcessLogInRequest(request);
 	}
 }

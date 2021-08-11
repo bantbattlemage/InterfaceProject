@@ -6,5 +6,6 @@ public class LogInRequest
 {
 	public string Username;
 	public string Password;
+	public string Email;
 	public bool NewRegistration;
 }
