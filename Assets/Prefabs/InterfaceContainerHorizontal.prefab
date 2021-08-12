@@ -37,7 +37,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: -5, y: 145}
-  m_SizeDelta: {x: 10, y: 300}
+  m_SizeDelta: {x: 5, y: 300}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &4796085507314507397
 MonoBehaviour:
@@ -160,7 +160,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7476770880289800162
 RectTransform:
   m_ObjectHideFlags: 0
@@ -383,7 +383,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: -5}
-  m_SizeDelta: {x: 10, y: 10}
+  m_SizeDelta: {x: 10, y: 5}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &6334372818968235080
 MonoBehaviour:
@@ -524,7 +524,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 5, y: 145}
-  m_SizeDelta: {x: 10, y: 300}
+  m_SizeDelta: {x: 5, y: 300}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &4899279860464944828
 MonoBehaviour:
@@ -647,7 +647,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4215562309470727607
 RectTransform:
   m_ObjectHideFlags: 0
@@ -788,7 +788,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7469551638431257749
 RectTransform:
   m_ObjectHideFlags: 0
@@ -929,7 +929,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5355387003098725283
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1088,7 +1088,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 295}
-  m_SizeDelta: {x: 10, y: 10}
+  m_SizeDelta: {x: 10, y: 5}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &3841843346596794817
 MonoBehaviour:
@@ -1244,6 +1244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d991cb8af0224e3438de1d077de16c5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FreeFloating: 0
   Top: {fileID: 3841843346596794817}
   Bottom: {fileID: 6334372818968235080}
   Left: {fileID: 4796085507314507397}

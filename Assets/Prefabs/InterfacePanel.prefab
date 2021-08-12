@@ -96,7 +96,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2593806717804361215}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -198,7 +198,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: -5}
-  m_SizeDelta: {x: 10, y: 15}
+  m_SizeDelta: {x: 10, y: 5}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1601405005402947111
 MonoBehaviour:
@@ -332,8 +332,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1392229242468239192}
-  - {fileID: 5681426864377987798}
   - {fileID: 3531924822719315572}
+  - {fileID: 5681426864377987798}
   m_Father: {fileID: 9118023400931267881}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -675,7 +675,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 5, y: 145}
-  m_SizeDelta: {x: 15, y: 300}
+  m_SizeDelta: {x: 5, y: 300}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &156745045810345171
 MonoBehaviour:
@@ -1692,7 +1692,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: -5, y: 145}
-  m_SizeDelta: {x: 15, y: 300}
+  m_SizeDelta: {x: 5, y: 300}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &242769423231855850
 MonoBehaviour:
@@ -1906,13 +1906,13 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2593806717804361215}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 1}
 --- !u!222 &6882902961932130548
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1950,15 +1950,21 @@ MonoBehaviour:
     m_MaxSize: 24
     m_Alignment: 0
     m_AlignByGeometry: 0
-    m_RichText: 1
+    m_RichText: 0
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\rLorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque libero
-    erat, elementum a ligula vel, faucibus consequat diam. Ut eleifend augue diam,
-    non tristique elit ultricies eget. Praesent ac pellentesque mauris. Quisque tincidunt
-    tellus arcu, in auctor mauris blandit cursus. Curabitur laoreet augue risus,
-    a lacinia dui accumsan eu."
+  m_Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum aliquam
+    turpis non suscipit rhoncus. Nulla lectus nisi, tempor ut imperdiet eu, ultricies
+    vitae neque. Duis sollicitudin lorem eget luctus cursus. Donec id est nisl. Proin
+    mollis maximus enim a pretium. Nunc urna tortor, condimentum sed lacinia vitae,
+    interdum quis orci. Quisque in porta nibh. Vivamus consequat iaculis odio ac
+    malesuada. Praesent ac purus eu sapien dignissim fringilla ut id libero. Donec
+    nec arcu lorem. Praesent fermentum urna leo, et fringilla sem molestie eu. Nulla
+    vitae mollis eros. Class aptent taciti sociosqu ad litora torquent per conubia
+    nostra, per inceptos himenaeos. Ut rutrum quam purus, nec elementum tellus sodales
+    eu. Quisque posuere et nibh ut finibus. Aenean posuere, sapien at ornare convallis,
+    sapien elit maximus quam, in pulvinar nisl elit semper nulla.
 --- !u!114 &8107208832472859878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2415,7 +2421,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 297}
-  m_SizeDelta: {x: 1700, y: 15}
+  m_SizeDelta: {x: 1700, y: 5}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &6564806045678270148
 MonoBehaviour:
@@ -3015,10 +3021,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 5
-    m_Right: 5
-    m_Top: 5
-    m_Bottom: 5
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
@@ -3049,7 +3055,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: bea83d1aafb00ef4db1c1fdf5fa7d920, type: 2}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.78431374}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
