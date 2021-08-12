@@ -3,6 +3,13 @@ using UnityEngine.EventSystems;
 
 public class MouseDragBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
+	private ScalablePanel _panel;
+
+	void Start()
+	{
+		_panel = GetComponent<ScalablePanel>();
+	}
+
 	private Vector2 lastMousePosition;
 
 	/// <summary>
@@ -21,6 +28,11 @@ public class MouseDragBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler
 	/// <param name="eventData">mouse pointer event data</param>
 	public void OnDrag(PointerEventData eventData)
 	{
+		if(_panel != null && _panel.Dragging)
+		{
+			return;
+		}
+
 		//	do not drag if clicking something
 		if (eventData.selectedObject != null)
 		{

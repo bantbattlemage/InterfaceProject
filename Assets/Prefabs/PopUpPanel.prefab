@@ -1013,9 +1013,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8075418347284183463}
   - component: {fileID: 317584754544256346}
-  - component: {fileID: 7164106851316482653}
   - component: {fileID: 4554657885523032442}
-  - component: {fileID: 8075418347284183458}
+  - component: {fileID: -2522146177167256960}
   - component: {fileID: 8075418347284183459}
   - component: {fileID: 4491096267557882846}
   - component: {fileID: 2008106442344567769}
@@ -1068,18 +1067,6 @@ MonoBehaviour:
   CloseButton: {fileID: 8075418348938582800}
   PopUpButtons: []
   InputFields: []
---- !u!114 &7164106851316482653
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8075418347284183462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae961a5877f87c409c51b5760732d99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4554657885523032442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1093,7 +1080,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FreeFloating: 1
---- !u!114 &8075418347284183458
+--- !u!114 &-2522146177167256960
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1102,17 +1089,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8075418347284183462}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Script: {fileID: 11500000, guid: eae961a5877f87c409c51b5760732d99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: 1
-  m_FlexibleHeight: 1
-  m_LayoutPriority: 1
 --- !u!114 &8075418347284183459
 MonoBehaviour:
   m_ObjectHideFlags: 0
