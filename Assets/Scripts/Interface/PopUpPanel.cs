@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public class PopUpPanel : MonoBehaviour
+public class PopUpPanel : MonoBehaviour, IPointerDownHandler
 {
 	public GameObject ButtonPrefab;
 	public GameObject InputFieldPrefab;
@@ -17,12 +18,42 @@ public class PopUpPanel : MonoBehaviour
 	public delegate void PopUpPanelEvent(PopUpPanel sender);
 	public PopUpPanelEvent PanelDetroyed;
 
+	public RectTransform RectT { get { if (_rectT == null) { _rectT = GetComponent<RectTransform>(); } return _rectT; } }
+	private RectTransform _rectT;
+
 	void Start()
 	{
 		if (CloseButton)
 		{
 			CloseButton.onClick.AddListener(ClosePopUp);
 		}
+	}
+
+	public void OnPointerDown(PointerEventData eventData)
+	{
+		// Vector2 position = GetDistanceFromAnchor(eventData.position);
+
+		// float margin = 10;
+
+		// if (position.x <= margin)
+		// {
+		// 	Debug.Log("left");
+		// }
+
+		// if (position.x >= RectT.rect.width - margin)
+		// {
+		// 	Debug.Log("right");
+		// }
+
+		// if (position.y <= margin)
+		// {
+		// 	Debug.Log("top");
+		// }
+
+		// if (position.y >= RectT.rect.height - margin)
+		// {
+		// 	Debug.Log("bottom");
+		// }
 	}
 
 	public void InitializePopUp(string popUpName = "", string popUpText = "", PopUpButtonProperties[] buttons = null, PopUpInputFieldProperties[] inputFields = null)
