@@ -115,7 +115,7 @@ public class InterfacePanelGroup : MonoBehaviour
 
 		_subPanels.Remove(panel);
 
-		Helpers.SafeDestory(panel.gameObject);
+		panel.gameObject.SafeDestory();
 
 		List<InterfacePanel> newList = GetComponentsInChildren<InterfacePanel>().ToList();
 		if (newList.Contains(panel))
@@ -158,7 +158,7 @@ public class InterfacePanelGroup : MonoBehaviour
 				throw new System.Exception("lost track of subPanel");
 			}
 
-			Helpers.SafeDestory(gameObject);
+			gameObject.SafeDestory();
 			NormalizePanelSizes();
 			return true;
 		}
@@ -191,12 +191,8 @@ public class InterfacePanelGroup : MonoBehaviour
 					throw new System.Exception("should not be possible to hit this");
 				}
 			}
-			// else
-			// {
-			// 	throw new System.Exception("???");	//	crashes here after adding redundant checks
-			// }
 
-			Helpers.SafeDestory(gameObject);
+			gameObject.SafeDestory();
 			NormalizePanelSizes();
 			return true;
 		}

@@ -107,7 +107,7 @@ public class PopUpPanel : MonoBehaviour, IPointerDownHandler
 			PanelDetroyed(this);
 		}
 
-		Destroy(gameObject);
+		gameObject.SafeDestory();
 	}
 }
 

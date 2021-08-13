@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public static class Helpers
+public static class GameObjectExtensions
 {
 	public static void SafeDestory(this GameObject obj)
 	{
