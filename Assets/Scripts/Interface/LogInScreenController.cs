@@ -37,6 +37,7 @@ public class LogInScreenController : MonoBehaviour
 		{
 			if (r.Error != null)
 			{
+				InterfaceController.Instance.CreateNewPopUp(popUpText: r.Error);
 				Debug.LogWarning(r.Error);
 			}
 			else

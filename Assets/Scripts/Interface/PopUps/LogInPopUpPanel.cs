@@ -18,8 +18,10 @@ public class LogInPopUpPanel : PopUpPanel
 	public LogInRequestEvent LogInSubmit;
 	public LogInRequestEvent RegisterSubmit;
 
-	void Start()
+	public override void Initialize()
 	{
+		base.Initialize();
+
 		LogInField.onEndEdit.AddListener((text) =>
 		{
 			if (Input.GetKeyDown(KeyCode.Return))

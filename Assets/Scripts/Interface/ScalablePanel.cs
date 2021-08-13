@@ -97,7 +97,7 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
-		if(!IsFreeFloating)
+		if (!IsFreeFloating)
 		{
 			return;
 		}
@@ -114,7 +114,7 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 		{
 			while (parentGroup != null)
 			{
-				parentPanel = parentGroup.GetComponent<ScalablePanel>();
+				parentPanel = parentGroup.Scale;
 
 				if (parentPanel.IsEdgeClick(eventData))
 				{
@@ -223,11 +223,10 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 		{
 			while (parentGroup != null)
 			{
-				parentPanel = parentGroup.GetComponent<ScalablePanel>();
+				parentPanel = parentGroup.Scale;
 
 				if (parentPanel.IsDragScaling)
 				{
-					//Debug.Log("parent click");
 					parentPanel.OnDrag(eventData);
 					return;
 				}
@@ -251,7 +250,7 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
 		if (IsDragScaling)
 		{
-			if(IsFreeFloating && !RectT.IsRectTransformInsideSreen())
+			if (IsFreeFloating && !RectT.IsRectTransformInsideSreen())
 			{
 				IsDragScaling = false;
 				return;
@@ -310,7 +309,7 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 		{
 			while (parentGroup != null)
 			{
-				parentPanel = parentGroup.GetComponent<ScalablePanel>();
+				parentPanel = parentGroup.Scale;
 
 				if (parentPanel)
 				{

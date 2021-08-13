@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public class PopUpPanel : MonoBehaviour, IPointerDownHandler
+public class PopUpPanel : InterfaceElement
 {
 	public GameObject ButtonPrefab;
 	public GameObject InputFieldPrefab;
@@ -18,28 +18,32 @@ public class PopUpPanel : MonoBehaviour, IPointerDownHandler
 	public delegate void PopUpPanelEvent(PopUpPanel sender);
 	public PopUpPanelEvent PanelDetroyed;
 
-	public RectTransform RectT { get { if (_rectT == null) { _rectT = GetComponent<RectTransform>(); } return _rectT; } }
-	private RectTransform _rectT;
+	public Vector3 Center { get { return new Vector3((Screen.width / 2) - (RectT.rect.width / 2), (Screen.height / 2) + (RectT.rect.height / 2), 0); } }
 
 	void Start()
 	{
-		if (CloseButton)
-		{
-			CloseButton.onClick.AddListener(ClosePopUp);
-		}
+		RectT.position = Center;
+		Initialize();
 	}
 
-	public void OnPointerDown(PointerEventData eventData)
+	public virtual void Initialize()
 	{
 
 	}
 
 	public void InitializePopUp(string popUpName = "", string popUpText = "", PopUpButtonProperties[] buttons = null, PopUpInputFieldProperties[] inputFields = null)
 	{
-		GetComponent<ScalablePanel>().Initialize();
+		Scale.Initialize();
 
 		PanelName.text = popUpName;
 		PanelText.text = popUpText;
+
+
+
+		if (CloseButton)
+		{
+			CloseButton.onClick.AddListener(ClosePopUp);
+		}
 
 		if (inputFields != null)
 		{

@@ -1,14 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InterfacePanel : MonoBehaviour
+public class InterfacePanel : InterfaceElement
 {
 	public Text PanelName;
 	public Button CloseButton;
 	public Button HorizontalSplitButton;
 	public Button VerticalSplitButton;
 
-	public Transform Body;
 	public InterfacePanelGroup ParentPanelGroup;
 	public delegate void PanelEvent(InterfacePanel sender);
 	public PanelEvent PanelCloseButtonClicked;
@@ -17,7 +16,7 @@ public class InterfacePanel : MonoBehaviour
 
 	public void Initialize()
 	{
-		GetComponent<ScalablePanel>().Initialize();
+		Scale.Initialize();
 
 		CloseButton.onClick.AddListener(OnCloseButtonClicked);
 		HorizontalSplitButton.onClick.AddListener(OnSplitHorizontalButtonClicked);
@@ -36,7 +35,6 @@ public class InterfacePanel : MonoBehaviour
 		transform.SetParent(panelGroup.transform);
 		ParentPanelGroup = panelGroup;
 		panelGroup.NormalizePanelSizes();
-		//gameObject.GetComponent<ScalablePanel>().ResetScale();
 	}
 
 	public void SetToRoot()
@@ -55,7 +53,7 @@ public class InterfacePanel : MonoBehaviour
 
 		InterfaceController.Instance.RootLevelPanels.Add(this);
 		transform.SetParent(InterfaceController.Instance.Body);
-		gameObject.GetComponent<ScalablePanel>().ResetScale();
+		Scale.ResetScale();
 	}
 
 	public void OnCloseButtonClicked()

@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InterfacePanelGroup : MonoBehaviour
+public class InterfacePanelGroup : InterfaceElement
 {
 	public InterfacePanelGroupOrientation GroupOrientation;
 
