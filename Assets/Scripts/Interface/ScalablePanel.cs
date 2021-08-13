@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,7 +10,7 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 	public bool IsFreeFloating = false;
 	private Vector2 _maxSize;
 	private Vector2 _minSize;
-	private float _edgeMargin = 20;
+	private float _edgeMargin = 40;
 	private ScaleMode _scaleMode;
 	private LayoutElement _element;
 	private RectTransform _rectT;
@@ -31,10 +29,12 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
 		if (IsFreeFloating)
 		{
-			//_minSize = new Vector2((_edgeMargin * 2) + 100, (_edgeMargin * 2) + 100);
+			_minSize = new Vector2((_edgeMargin * 2), (_edgeMargin * 2));
 		}
 		else
 		{
+			_minSize = new Vector2(10, 10);
+
 			LElement.flexibleWidth = DefaultSize.x;
 			LElement.flexibleHeight = DefaultSize.y;
 			LElement.preferredHeight = 0;
@@ -66,25 +66,24 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
 		if (position.x <= _edgeMargin)
 		{
-			Debug.Log("left");
+			//Debug.Log("left");
 			return true;
 		}
 		else if (position.x >= RectT.rect.width - _edgeMargin)
 		{
-			Debug.Log("right");
+			//Debug.Log("right");
 			return true;
-
 		}
 
 		if (position.y <= _edgeMargin)
 		{
-			Debug.Log("top");
+			//Debug.Log("top");
 			return true;
 
 		}
 		else if (position.y >= RectT.rect.height - _edgeMargin)
 		{
-			Debug.Log("bottom");
+			//Debug.Log("bottom");
 			return true;
 		}
 
@@ -119,7 +118,7 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
 			if (parentPanel.IsEdgeClick(eventData))
 			{
-				Debug.Log("parent click");
+				//Debug.Log("parent click");
 				parentPanel.OnBeginDrag(eventData);
 				return;
 			}

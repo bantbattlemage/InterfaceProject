@@ -60,6 +60,13 @@ public class InterfacePanelGroup : MonoBehaviour
 			element.flexibleWidth = newSizes[i].x;
 			element.flexibleHeight = newSizes[i].y;
 		}
+
+		InterfacePanelGroup parent = transform.parent?.GetComponent<InterfacePanelGroup>();
+
+		if (parent != null)
+		{
+			parent.NormalizePanelSizes();
+		}
 	}
 
 	public void InsertPanel(InterfacePanel panel)
