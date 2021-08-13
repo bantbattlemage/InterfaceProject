@@ -246,6 +246,12 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
 		if (IsDragScaling)
 		{
+			if(!RectT.IsRectTransformInsideSreen())
+			{
+				IsDragScaling = false;
+				return;
+			}
+
 			if (IsFreeFloating)
 			{
 				Vector2 newSize = RectT.sizeDelta + new Vector2(eventData.delta.x * _scaleFactor.x, eventData.delta.y * _scaleFactor.y);

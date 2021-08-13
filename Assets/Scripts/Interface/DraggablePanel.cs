@@ -46,7 +46,7 @@ public class DraggablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
 		Vector3 newPosition = rect.position + new Vector3(diff.x, diff.y, transform.position.z);
 		Vector3 oldPos = rect.position;
 		rect.position = newPosition;
-		if (!IsRectTransformInsideSreen(rect))
+		if (!GetComponent<RectTransform>().IsRectTransformInsideSreen())
 		{
 			rect.position = oldPos;
 		}
@@ -61,31 +61,5 @@ public class DraggablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
 	{
 		//Debug.Log("End Drag");
 		//Implement your funtionlity here
-	}
-
-	/// <summary>
-	/// This methods will check is the rect transform is inside the screen or not
-	/// </summary>
-	/// <param name="rectTransform">Rect Trasform</param>
-	/// <returns></returns>
-	private bool IsRectTransformInsideSreen(RectTransform rectTransform)
-	{
-		bool isInside = false;
-		Vector3[] corners = new Vector3[4];
-		rectTransform.GetWorldCorners(corners);
-		int visibleCorners = 0;
-		Rect rect = new Rect(0, 0, Screen.width, Screen.height);
-		foreach (Vector3 corner in corners)
-		{
-			if (rect.Contains(corner))
-			{
-				visibleCorners++;
-			}
-		}
-		if (visibleCorners == 4)
-		{
-			isInside = true;
-		}
-		return isInside;
 	}
 }

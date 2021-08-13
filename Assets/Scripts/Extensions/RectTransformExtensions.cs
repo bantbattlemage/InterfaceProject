@@ -43,6 +43,27 @@ public enum PivotPresets
 
 public static class RectTransformExtensions
 {
+	public static bool IsRectTransformInsideSreen(this RectTransform rectTransform)
+	{
+		bool isInside = false;
+		Vector3[] corners = new Vector3[4];
+		rectTransform.GetWorldCorners(corners);
+		int visibleCorners = 0;
+		Rect rect = new Rect(0, 0, Screen.width, Screen.height);
+		foreach (Vector3 corner in corners)
+		{
+			if (rect.Contains(corner))
+			{
+				visibleCorners++;
+			}
+		}
+		if (visibleCorners == 4)
+		{
+			isInside = true;
+		}
+		return isInside;
+	}
+
 	public static void SetAnchor(this RectTransform source, AnchorPresets allign, int offsetX = 0, int offsetY = 0)
 	{
 		//source.anchoredPosition = new Vector3(offsetX, offsetY, 0);
