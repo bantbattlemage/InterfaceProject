@@ -46,7 +46,7 @@ public class DraggablePanel : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
 		Vector3 newPosition = rect.position + new Vector3(diff.x, diff.y, transform.position.z);
 		Vector3 oldPos = rect.position;
 		rect.position = newPosition;
-		if (!GetComponent<RectTransform>().IsRectTransformInsideSreen())
+		if (!rect.IsRectTransformInsideSreen())
 		{
 			rect.position = oldPos;
 		}

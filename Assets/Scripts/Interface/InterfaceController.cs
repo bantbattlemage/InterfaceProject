@@ -98,11 +98,11 @@ public class InterfaceController : MonoBehaviour
 			LogInScreen.gameObject.SetActive(true);
 			LogInScreen.InitializeLogInScreen();
 			Debug.Log("Logged Out");
-			logOutPopUpObject.SafeDestory();
+			logOutPopUpObject.SafeDestroy();
 		});
 		logOutPopUp.PopUpButtons[1].onClick.AddListener(() =>
 		{
-			logOutPopUpObject.SafeDestory();
+			logOutPopUpObject.SafeDestroy();
 		});
 	}
 
@@ -287,7 +287,7 @@ public class InterfaceController : MonoBehaviour
 		else
 		{
 			RootLevelPanels.Remove(panel);
-			panel.gameObject.SafeDestory();
+			panel.gameObject.SafeDestroy();
 		}
 
 		for (int i = ActivePanelGroups.Count - 1; i >= 0; i--)

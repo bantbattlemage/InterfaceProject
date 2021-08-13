@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public static class GameObjectExtensions
 {
-	public static void SafeDestory(this GameObject obj)
+	public static void SafeDestroy(this GameObject obj)
 	{
 		obj.transform.SetParent(null);
 		obj.name = "$disposed";

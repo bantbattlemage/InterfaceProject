@@ -115,7 +115,7 @@ public class InterfacePanelGroup : MonoBehaviour
 
 		_subPanels.Remove(panel);
 
-		panel.gameObject.SafeDestory();
+		panel.gameObject.SafeDestroy();
 
 		List<InterfacePanel> newList = GetComponentsInChildren<InterfacePanel>().ToList();
 		if (newList.Contains(panel))
@@ -155,7 +155,7 @@ public class InterfacePanelGroup : MonoBehaviour
 				throw new System.Exception("lost track of subPanel");
 			}
 
-			gameObject.SafeDestory();
+			gameObject.SafeDestroy();
 			NormalizePanelSizes();
 			return true;
 		}
@@ -189,7 +189,7 @@ public class InterfacePanelGroup : MonoBehaviour
 				}
 			}
 
-			gameObject.SafeDestory();
+			gameObject.SafeDestroy();
 			NormalizePanelSizes();
 			return true;
 		}

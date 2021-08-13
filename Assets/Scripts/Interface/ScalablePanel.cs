@@ -97,6 +97,11 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
+		if(!IsFreeFloating)
+		{
+			return;
+		}
+
 		IsDragScaling = false;
 	}
 
@@ -246,7 +251,7 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
 		if (IsDragScaling)
 		{
-			if(!RectT.IsRectTransformInsideSreen())
+			if(IsFreeFloating && !RectT.IsRectTransformInsideSreen())
 			{
 				IsDragScaling = false;
 				return;
