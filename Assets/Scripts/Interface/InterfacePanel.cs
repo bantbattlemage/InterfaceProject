@@ -15,8 +15,10 @@ public class InterfacePanel : MonoBehaviour
 	public PanelEvent PanelSplitHorizontalButtonClicked;
 	public PanelEvent PanelSplitVerticalButtonClicked;
 
-	void Start()
+	void Awake()
 	{
+		GetComponent<ScalablePanel>().Initialize();
+
 		CloseButton.onClick.AddListener(OnCloseButtonClicked);
 		HorizontalSplitButton.onClick.AddListener(OnSplitHorizontalButtonClicked);
 		VerticalSplitButton.onClick.AddListener(OnSplitVerticalButtonClicked);

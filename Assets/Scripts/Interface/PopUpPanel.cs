@@ -58,9 +58,10 @@ public class PopUpPanel : MonoBehaviour, IPointerDownHandler
 
 	public void InitializePopUp(string popUpName = "", string popUpText = "", PopUpButtonProperties[] buttons = null, PopUpInputFieldProperties[] inputFields = null)
 	{
+		GetComponent<ScalablePanel>().Initialize();
+
 		PanelName.text = popUpName;
 		PanelText.text = popUpText;
-
 
 		if (inputFields != null)
 		{

@@ -9,3 +9,11 @@ The following packages were added:
   com.unity.analytics@3.5.3
   com.unity.purchasing@3.2.2
   com.unity.xr.legacyinputhelpers@2.1.7
+
+=== Thu Aug 12 18:38:55 2021
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.ide.visualstudio from version 2.0.9 to 2.0.11

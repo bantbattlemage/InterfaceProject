@@ -6,11 +6,11 @@ using UnityEngine.UI;
 
 public enum ScaleMode { None, Top, Bottom, Left, Right, TopLeft, TopRight, BottomLeft, BottomRight };
 
-public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler
+public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-	public bool FreeFloating = false;
-	private float _maxSize = 5000;
-	private float _minSize = 100;
+	public bool IsFreeFloating = false;
+	private Vector2 _maxSize;
+	private Vector2 _minSize;
 	private float _edgeMargin = 20;
 	private ScaleMode _scaleMode;
 	private LayoutElement _element;
@@ -19,32 +19,40 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
 	public RectTransform RectT { get { if (_rectT == null) { _rectT = GetComponent<RectTransform>(); } return _rectT; } }
 	public LayoutElement LElement { get { if (_element == null) { _element = GetComponent<LayoutElement>(); } return _element; } }
-	public bool Dragging { get; private set; }
+	public bool IsDragScaling { get; private set; }
+	public Vector2 DefaultSize { get { return new Vector2(_maxSize.x / 2, _maxSize.y / 2); } }
 
-	void Awake()
+	public void Initialize()
 	{
-		Dragging = false;
+		IsDragScaling = false;
+		_maxSize = new Vector2(Screen.width, Screen.height);
+		_minSize = new Vector2((_edgeMargin * 2), (_edgeMargin * 2));
 
-		if (FreeFloating)
+		if (IsFreeFloating)
 		{
-			_minSize = (_edgeMargin * 2) + 100;
+			//_minSize = new Vector2((_edgeMargin * 2) + 100, (_edgeMargin * 2) + 100);
 		}
 		else
 		{
-			_maxSize = Screen.width * 2;
-			LElement.flexibleHeight = _maxSize / 2;
-			LElement.flexibleWidth = _maxSize / 2;
+			LElement.flexibleHeight = DefaultSize.x;
+			LElement.flexibleWidth = DefaultSize.y;
 			LElement.preferredHeight = 0;
 			LElement.preferredWidth = 0;
+		}
+
+		InterfacePanelGroup parent = transform.parent.GetComponent<InterfacePanelGroup>();
+		if (parent != null)
+		{
+			parent.NormalizePanelSizes();
 		}
 	}
 
 	public void ResetScale()
 	{
-		LElement.flexibleHeight = _maxSize / 2;
-		LElement.flexibleWidth = _maxSize / 2;
-		LElement.preferredHeight = 0;
+		LElement.flexibleWidth = DefaultSize.x;
+		LElement.flexibleHeight = DefaultSize.y;
 		LElement.preferredWidth = 0;
+		LElement.preferredHeight = 0;
 	}
 
 	public void OnPointerDown(PointerEventData eventData)
@@ -56,7 +64,7 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
-		Dragging = false;
+		IsDragScaling = false;
 	}
 
 	public void OnBeginDrag(PointerEventData eventData)
@@ -72,26 +80,26 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 		{
 			Debug.Log("left");
 			sides[0] = true;
-			Dragging = true;
+			IsDragScaling = true;
 		}
 		else if (position.x >= RectT.rect.width - _edgeMargin)
 		{
 			Debug.Log("right");
 			sides[1] = true;
-			Dragging = true;
+			IsDragScaling = true;
 		}
 
 		if (position.y <= _edgeMargin)
 		{
 			Debug.Log("top");
 			sides[2] = true;
-			Dragging = true;
+			IsDragScaling = true;
 		}
 		else if (position.y >= RectT.rect.height - _edgeMargin)
 		{
 			Debug.Log("bottom");
 			sides[3] = true;
-			Dragging = true;
+			IsDragScaling = true;
 		}
 
 		if (sides.Count(x => x) == 1)
@@ -155,13 +163,13 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 		//	i don't know why the y value is inverted but it is
 		position.y = -position.y;
 
-		if (Dragging)
+		if (IsDragScaling)
 		{
-			if (FreeFloating)
+			if (IsFreeFloating)
 			{
 				Vector2 newSize = RectT.sizeDelta + new Vector2(eventData.delta.x * _scaleFactor.x, eventData.delta.y * _scaleFactor.y);
 
-				if ((newSize.x >= _maxSize || newSize.x <= _minSize) || (newSize.y >= _maxSize || newSize.y <= _minSize))
+				if ((newSize.x >= _maxSize.x || newSize.x <= _minSize.x) || (newSize.y >= _maxSize.y || newSize.y <= _minSize.y))
 				{
 					return;
 				}
@@ -180,12 +188,34 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 			}
 			else
 			{
+				float verticalRampMultiplier = 1f;   //	vertical scaling is slow so ramp it up
+
 				Vector2 size = new Vector2(_element.flexibleWidth, _element.flexibleHeight);
-				Vector2 newSize = size + new Vector2(eventData.delta.x * _scaleFactor.x, eventData.delta.y * _scaleFactor.y);
+				Vector2 newSize = size + new Vector2(eventData.delta.x * _scaleFactor.x, eventData.delta.y * _scaleFactor.y * verticalRampMultiplier);
+
+				if ((newSize.x >= _maxSize.x || newSize.x <= _minSize.x) || (newSize.y >= _maxSize.y || newSize.y <= _minSize.y))
+				{
+					return;
+				}
 
 				_element.flexibleWidth = newSize.x;
 				_element.flexibleHeight = newSize.y;
 			}
+		}
+	}
+
+	public void OnEndDrag(PointerEventData eventData)
+	{
+		if (IsFreeFloating)
+		{
+			return;
+		}
+
+		InterfacePanelGroup parent = transform.parent.GetComponent<InterfacePanelGroup>();
+
+		if (parent != null)
+		{
+			parent.NormalizePanelSizes();
 		}
 	}
 }

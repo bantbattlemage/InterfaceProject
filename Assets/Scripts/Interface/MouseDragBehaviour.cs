@@ -28,7 +28,7 @@ public class MouseDragBehaviour : MonoBehaviour, IDragHandler, IBeginDragHandler
 	/// <param name="eventData">mouse pointer event data</param>
 	public void OnDrag(PointerEventData eventData)
 	{
-		if(_panel != null && _panel.Dragging)
+		if(_panel != null && _panel.IsDragScaling)
 		{
 			return;
 		}

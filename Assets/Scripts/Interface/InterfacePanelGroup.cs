@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InterfacePanelGroup : MonoBehaviour
 {
@@ -13,6 +14,53 @@ public class InterfacePanelGroup : MonoBehaviour
 	{
 		Horizontal,
 		Vertical
+	}
+
+	void Awake()
+	{
+		ScalablePanel p = GetComponent<ScalablePanel>();
+		if (p != null)
+		{
+			p.Initialize();
+		}
+	}
+
+	public void NormalizePanelSizes()
+	{
+		List<ScalablePanel> panels = new List<ScalablePanel>();
+		List<Vector2> scales = new List<Vector2>();
+		float totalWidth = 0;
+		float totalHeight = 0;
+
+		_subPanels.ForEach(x => { panels.Add(x.GetComponent<ScalablePanel>()); });
+		_subGroups.ForEach(x => { panels.Add(x.GetComponent<ScalablePanel>()); });
+
+		foreach (ScalablePanel p in panels)
+		{
+			LayoutElement element = p.GetComponent<LayoutElement>();
+			Vector2 size = new Vector2(element.flexibleWidth, element.flexibleHeight);
+			totalWidth += size.x;
+			totalHeight += size.y;
+			scales.Add(size);
+		}
+
+		List<Vector2> newSizes = new List<Vector2>();
+
+		for (int i = 0; i < scales.Count; i++)
+		{
+			float relativeWidth = scales[i].x / totalWidth;
+			float relativeHeight = scales[i].y / totalHeight;
+
+			Vector2 newSize = new Vector2(relativeWidth * panels[i].DefaultSize.x, relativeHeight * panels[i].DefaultSize.y);
+			newSizes.Add(newSize);
+		}
+
+		for (int i = 0; i < scales.Count; i++)
+		{
+			LayoutElement element = panels[i].GetComponent<LayoutElement>();
+			element.flexibleWidth = newSizes[i].x;
+			element.flexibleHeight = newSizes[i].y;
+		}
 	}
 
 	public void InsertPanel(InterfacePanel panel)

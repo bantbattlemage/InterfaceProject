@@ -11,9 +11,9 @@ public class InterfaceController : MonoBehaviour
 	public GameObject PopUpPanelPrefab;
 	public GameObject LogOutPopUpPrefab;
 	public GameObject MarketPanelPrefab;
-    public GameObject MapPanelPrefab;
+	public GameObject MapPanelPrefab;
 
-    public Button NewPanelButton;
+	public Button NewPanelButton;
 	public LogInScreenController LogInScreen;
 
 	public Transform Body;
@@ -40,6 +40,9 @@ public class InterfaceController : MonoBehaviour
 
 	void Start()
 	{
+		Body.GetComponent<LayoutElement>().flexibleWidth = Screen.width;
+		Body.GetComponent<LayoutElement>().flexibleHeight = Screen.height;
+
 		//	Assign button callbacks
 		NewPanelButton.onClick.AddListener(OnNewPanelButtonClicked);
 
@@ -107,8 +110,10 @@ public class InterfaceController : MonoBehaviour
 	{
 		GameObject newPopUpObject = Instantiate(PopUpPanelPrefab, PopUpLayer);
 		PopUpPanel newPopUpPanel = newPopUpObject.GetComponent<PopUpPanel>();
+		newPopUpPanel.GetComponent<ScalablePanel>().IsFreeFloating = true;
 		newPopUpPanel.InitializePopUp(popUpName, popUpText, buttons, inputFields);
 		newPopUpPanel.PanelDetroyed += OnPopUpPanelDestroyed;
+
 		ActivePopUpPanels.Add(newPopUpPanel);
 
 		return newPopUpPanel;
@@ -124,41 +129,41 @@ public class InterfaceController : MonoBehaviour
 		GameObject newPanel = Instantiate(MarketPanelPrefab, parent);
 		MarketInterfacePanel panel = newPanel.GetComponent<MarketInterfacePanel>();
 
-        RegisterPanelButtonEvents(panel);
+		RegisterPanelButtonEvents(panel);
 
-        if (parent == Body)
-        {
-            RootLevelPanels.Add(panel);
-        }
+		if (parent == Body)
+		{
+			RootLevelPanels.Add(panel);
+		}
 
-        ReplacePanel(panel, parent);
+		ReplacePanel(panel, parent);
 
-        return panel;
+		return panel;
 	}
 
 
-    public MapInterfacePanel CreateMapPanel(Transform parent = null, string targetItem = "")
-    {
-        if (parent == null)
-        {
-            parent = Body;
-        }
+	public MapInterfacePanel CreateMapPanel(Transform parent = null, string targetItem = "")
+	{
+		if (parent == null)
+		{
+			parent = Body;
+		}
 
-        GameObject newPanel = Instantiate(MapPanelPrefab, parent);
-        MapInterfacePanel panel = newPanel.GetComponent<MapInterfacePanel>();
-        panel.Initialize();
+		GameObject newPanel = Instantiate(MapPanelPrefab, parent);
+		MapInterfacePanel panel = newPanel.GetComponent<MapInterfacePanel>();
+		panel.Initialize();
 
-        RegisterPanelButtonEvents(panel);
+		RegisterPanelButtonEvents(panel);
 
-        if (parent == Body)
-        {
-            RootLevelPanels.Add(panel);
-        }
+		if (parent == Body)
+		{
+			RootLevelPanels.Add(panel);
+		}
 
-        ReplacePanel(panel, parent);
+		ReplacePanel(panel, parent);
 
-        return panel;
-    }
+		return panel;
+	}
 
 	public void ReplacePanel(InterfacePanel newPanel, Transform parent)
 	{
