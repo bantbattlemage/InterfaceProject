@@ -112,13 +112,6 @@ public class InterfacePanelGroup : MonoBehaviour
 		}
 
 		List<InterfacePanel> p = GetComponentsInChildren<InterfacePanel>().ToList();
-		if (p.Contains(panel))
-		{
-			Debug.Log("panel is a child of this object");
-		}
-
-		Debug.Log("list count: " + p.Count);
-		Debug.Log("transform count: " + transform.childCount);
 
 		_subPanels.Remove(panel);
 
@@ -129,9 +122,6 @@ public class InterfacePanelGroup : MonoBehaviour
 		{
 			Debug.Log("panel is still a child of this object");
 		}
-
-		Debug.Log("list count: " + newList.Count);
-		Debug.Log("transform count: " + transform.childCount);
 
 		if (Cleanup())
 		{

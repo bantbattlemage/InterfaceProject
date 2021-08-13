@@ -199,7 +199,7 @@ public class InterfaceController : MonoBehaviour
 		InterfacePanel panel = newPanel.GetComponent<InterfacePanel>();
 		string name = string.Format("New Panel {0}", FindObjectsOfType<InterfacePanel>().ToList().Count);
 		panel.Initialize(name);
-		Debug.Log(string.Format("{0} created", panel.PanelName.text));
+		//Debug.Log(string.Format("{0} created", panel.PanelName.text));
 
 		if (parent == Body)
 		{
@@ -250,7 +250,7 @@ public class InterfaceController : MonoBehaviour
 		newGroup.InsertPanel(sender);
 		newGroup.Initialize();
 
-		Debug.Log(string.Format("{0} split", sender.PanelName.text));
+		//Debug.Log(string.Format("{0} split", sender.PanelName.text));
 
 		CreateNewPanel(newGroup);
 	}

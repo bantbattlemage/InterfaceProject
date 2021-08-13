@@ -98,29 +98,33 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 	public void OnPointerUp(PointerEventData eventData)
 	{
 		IsDragScaling = false;
-
-		InterfacePanelGroup parent = transform.parent.GetComponent<InterfacePanelGroup>();
-
-		if (parent != null)
-		{
-			parent.GetComponent<ScalablePanel>().IsDragScaling = false;
-		}
 	}
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
-		InterfacePanelGroup g = transform.parent.GetComponent<InterfacePanelGroup>();
+		InterfacePanelGroup parentGroup = transform.parent.GetComponent<InterfacePanelGroup>();
 		ScalablePanel parentPanel;
 
-		if (g)
+		if (parentGroup)
 		{
-			parentPanel = g.GetComponent<ScalablePanel>();
-
-			if (parentPanel.IsEdgeClick(eventData))
+			while (parentGroup != null)
 			{
-				//Debug.Log("parent click");
-				parentPanel.OnBeginDrag(eventData);
-				return;
+				parentPanel = parentGroup.GetComponent<ScalablePanel>();
+
+				if (parentPanel.IsEdgeClick(eventData))
+				{
+					//Debug.Log("parent click");
+					parentPanel.OnBeginDrag(eventData);
+					return;
+				}
+				else if (parentGroup != null)
+				{
+					parentGroup = parentGroup.transform.parent.GetComponent<InterfacePanelGroup>();
+				}
+				else
+				{
+					break;
+				}
 			}
 		}
 
@@ -207,17 +211,29 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
 	public void OnDrag(PointerEventData eventData)
 	{
-		InterfacePanelGroup g = transform.parent.GetComponent<InterfacePanelGroup>();
+		InterfacePanelGroup parentGroup = transform.parent.GetComponent<InterfacePanelGroup>();
 		ScalablePanel parentPanel;
 
-		if (g)
+		if (parentGroup)
 		{
-			parentPanel = g.GetComponent<ScalablePanel>();
-
-			if (parentPanel.IsDragScaling)
+			while (parentGroup != null)
 			{
-				parentPanel.OnDrag(eventData);
-				return;
+				parentPanel = parentGroup.GetComponent<ScalablePanel>();
+
+				if (parentPanel.IsDragScaling)
+				{
+					//Debug.Log("parent click");
+					parentPanel.OnDrag(eventData);
+					return;
+				}
+				else if (parentGroup != null)
+				{
+					parentGroup = parentGroup.transform.parent.GetComponent<InterfacePanelGroup>();
+				}
+				else
+				{
+					break;
+				}
 			}
 		}
 
@@ -276,11 +292,29 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 			return;
 		}
 
-		InterfacePanelGroup parent = transform.parent.GetComponent<InterfacePanelGroup>();
+		InterfacePanelGroup parentGroup = transform.parent.GetComponent<InterfacePanelGroup>();
+		ScalablePanel parentPanel;
 
-		if (parent != null)
+		if (parentGroup)
 		{
-			parent.NormalizePanelSizes();
+			while (parentGroup != null)
+			{
+				parentPanel = parentGroup.GetComponent<ScalablePanel>();
+
+				if (parentPanel)
+				{
+					parentPanel.OnEndDrag(eventData);
+				}
+
+				parentGroup = parentGroup.transform.parent.GetComponent<InterfacePanelGroup>();
+
+				if (parentGroup == null)
+				{
+					break;
+				}
+			}
 		}
+
+		IsDragScaling = false;
 	}
 }
