@@ -38,3 +38,5 @@ sysinfo.txt
 
 .fake
 .ionide
+*.log
+Logs/shadercompiler-UnityShaderCompiler.exe0.log
