@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -40,11 +41,11 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 			LElement.preferredWidth = 0;
 		}
 
-		// InterfacePanelGroup parent = transform.parent.GetComponent<InterfacePanelGroup>();
-		// if (parent != null)
-		// {
-		// 	parent.NormalizePanelSizes();
-		// }
+		InterfacePanelGroup parent = transform.parent.GetComponent<InterfacePanelGroup>();
+		if (parent != null)
+		{
+			parent.NormalizePanelSizes();
+		}
 	}
 
 	public void ResetScale()
@@ -55,30 +56,72 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 		LElement.preferredHeight = 0;
 	}
 
+	public bool IsEdgeClick(PointerEventData eventData)
+	{
+		Vector2 position;
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(RectT, eventData.pressPosition, null, out position);
+
+		//	y value is inverted
+		position.y = -position.y;
+
+		if (position.x <= _edgeMargin)
+		{
+			Debug.Log("left");
+			return true;
+		}
+		else if (position.x >= RectT.rect.width - _edgeMargin)
+		{
+			Debug.Log("right");
+			return true;
+
+		}
+
+		if (position.y <= _edgeMargin)
+		{
+			Debug.Log("top");
+			return true;
+
+		}
+		else if (position.y >= RectT.rect.height - _edgeMargin)
+		{
+			Debug.Log("bottom");
+			return true;
+		}
+
+		return false;
+	}
+
 	public void OnPointerDown(PointerEventData eventData)
 	{
-		// Vector2 position;
-		// RectTransformUtility.ScreenPointToLocalPointInRectangle(RectT, eventData.pressPosition, null, out position);
-		// Debug.Log(position);
+
 	}
 
 	public void OnPointerUp(PointerEventData eventData)
 	{
 		IsDragScaling = false;
+
+		InterfacePanelGroup parent = transform.parent.GetComponent<InterfacePanelGroup>();
+
+		if (parent != null)
+		{
+			parent.GetComponent<ScalablePanel>().IsDragScaling = false;
+		}
 	}
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
 		InterfacePanelGroup g = transform.parent.GetComponent<InterfacePanelGroup>();
+		ScalablePanel parentPanel;
 
 		if (g)
 		{
-			g.NormalizePanelSizes();
+			parentPanel = g.GetComponent<ScalablePanel>();
 
-			//	shouldnt need to do this here??? prob need to fix
-			if (g.Cleanup())
+			if (parentPanel.IsEdgeClick(eventData))
 			{
-				InterfaceController.Instance.ActivePanelGroups.Remove(g);
+				Debug.Log("parent click");
+				parentPanel.OnBeginDrag(eventData);
+				return;
 			}
 		}
 
@@ -91,26 +134,22 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
 		if (position.x <= _edgeMargin)
 		{
-			Debug.Log("left");
 			sides[0] = true;
 			IsDragScaling = true;
 		}
 		else if (position.x >= RectT.rect.width - _edgeMargin)
 		{
-			Debug.Log("right");
 			sides[1] = true;
 			IsDragScaling = true;
 		}
 
 		if (position.y <= _edgeMargin)
 		{
-			Debug.Log("top");
 			sides[2] = true;
 			IsDragScaling = true;
 		}
 		else if (position.y >= RectT.rect.height - _edgeMargin)
 		{
-			Debug.Log("bottom");
 			sides[3] = true;
 			IsDragScaling = true;
 		}
@@ -169,6 +208,20 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
 	public void OnDrag(PointerEventData eventData)
 	{
+		InterfacePanelGroup g = transform.parent.GetComponent<InterfacePanelGroup>();
+		ScalablePanel parentPanel;
+
+		if (g)
+		{
+			parentPanel = g.GetComponent<ScalablePanel>();
+
+			if (parentPanel.IsDragScaling)
+			{
+				parentPanel.OnDrag(eventData);
+				return;
+			}
+		}
+
 		bool[] sides = new bool[4];
 		Vector2 position;
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(RectT, eventData.pressPosition, null, out position);
