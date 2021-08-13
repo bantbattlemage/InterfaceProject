@@ -34,17 +34,17 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 		}
 		else
 		{
-			LElement.flexibleHeight = DefaultSize.x;
-			LElement.flexibleWidth = DefaultSize.y;
+			LElement.flexibleWidth = DefaultSize.x;
+			LElement.flexibleHeight = DefaultSize.y;
 			LElement.preferredHeight = 0;
 			LElement.preferredWidth = 0;
 		}
 
-		InterfacePanelGroup parent = transform.parent.GetComponent<InterfacePanelGroup>();
-		if (parent != null)
-		{
-			parent.NormalizePanelSizes();
-		}
+		// InterfacePanelGroup parent = transform.parent.GetComponent<InterfacePanelGroup>();
+		// if (parent != null)
+		// {
+		// 	parent.NormalizePanelSizes();
+		// }
 	}
 
 	public void ResetScale()
@@ -69,6 +69,19 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
+		InterfacePanelGroup g = transform.parent.GetComponent<InterfacePanelGroup>();
+
+		if (g)
+		{
+			g.NormalizePanelSizes();
+
+			//	shouldnt need to do this here??? prob need to fix
+			if (g.Cleanup())
+			{
+				InterfaceController.Instance.ActivePanelGroups.Remove(g);
+			}
+		}
+
 		bool[] sides = new bool[4];
 		Vector2 position;
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(RectT, eventData.pressPosition, null, out position);
@@ -188,7 +201,7 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 			}
 			else
 			{
-				float verticalRampMultiplier = 1f;   //	vertical scaling is slow so ramp it up
+				float verticalRampMultiplier = 0.5f;
 
 				Vector2 size = new Vector2(_element.flexibleWidth, _element.flexibleHeight);
 				Vector2 newSize = size + new Vector2(eventData.delta.x * _scaleFactor.x, eventData.delta.y * _scaleFactor.y * verticalRampMultiplier);

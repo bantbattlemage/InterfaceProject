@@ -8,7 +8,6 @@ public class InterfacePanelGroup : MonoBehaviour
 	public InterfacePanelGroupOrientation GroupOrientation;
 
 	private List<InterfacePanel> _subPanels = new List<InterfacePanel>();
-	private List<InterfacePanelGroup> _subGroups = new List<InterfacePanelGroup>();
 
 	public enum InterfacePanelGroupOrientation
 	{
@@ -16,7 +15,7 @@ public class InterfacePanelGroup : MonoBehaviour
 		Vertical
 	}
 
-	void Awake()
+	public void Initialize()
 	{
 		ScalablePanel p = GetComponent<ScalablePanel>();
 		if (p != null)
@@ -33,7 +32,7 @@ public class InterfacePanelGroup : MonoBehaviour
 		float totalHeight = 0;
 
 		_subPanels.ForEach(x => { panels.Add(x.GetComponent<ScalablePanel>()); });
-		_subGroups.ForEach(x => { panels.Add(x.GetComponent<ScalablePanel>()); });
+		GetComponentsInChildren<InterfacePanelGroup>().ToList().ForEach(x => { if (x.transform.parent == transform) panels.Add(x.GetComponent<ScalablePanel>()); });
 
 		foreach (ScalablePanel p in panels)
 		{
@@ -70,13 +69,13 @@ public class InterfacePanelGroup : MonoBehaviour
 			throw new System.Exception("Panel already in this group!");
 		}
 
-		if (panel.ParentPanelGroup)
-		{
-			panel.ParentPanelGroup.RemovePanel(panel);
-		}
-		else if (InterfaceController.Instance.RootLevelPanels.Contains(panel))
+		if (InterfaceController.Instance.RootLevelPanels.Contains(panel))
 		{
 			InterfaceController.Instance.RootLevelPanels.Remove(panel);
+		}
+		else if (panel.ParentPanelGroup)
+		{
+			panel.ParentPanelGroup.RemovePanel(panel);
 		}
 
 		panel.AssignToPanelGroup(this);
@@ -105,26 +104,81 @@ public class InterfacePanelGroup : MonoBehaviour
 			throw new System.Exception("Tried to remove panel that is not in group");
 		}
 
-		panel.ParentPanelGroup = null;
+		List<InterfacePanel> p = GetComponentsInChildren<InterfacePanel>().ToList();
+		if (p.Contains(panel))
+		{
+			Debug.Log("panel is a child of this object");
+		}
+
+		Debug.Log("list count: " + p.Count);
+		Debug.Log("transform count: " + transform.childCount);
+
 		_subPanels.Remove(panel);
-		Destroy(panel.gameObject);
-		Destroy(panel);
+
+		GameObject.Destroy(panel.gameObject);
+
+		Debug.LogWarning(panel.gameObject.name);
+
+		List<InterfacePanel> newList = GetComponentsInChildren<InterfacePanel>().ToList();
+		if (newList.Contains(panel))
+		{
+			Debug.Log("panel is still a child of this object");
+		}
+
+		Debug.Log("list count: " + newList.Count);
+		Debug.Log("transform count: " + transform.childCount);
+
+		if (Cleanup())
+		{
+			InterfaceController.Instance.ActivePanelGroups.Remove(this);
+		}
+	}
+
+	public List<Transform> GetChildList()
+	{
+		List<Transform> childList = new List<Transform>();
+		for (int i = 0; i < transform.childCount; i++)
+		{
+			Transform c = transform.GetChild(i);
+			if (c.GetComponent<InterfacePanelGroup>() != null || c.GetComponent<InterfacePanel>() != null)
+			{
+				childList.Add(c);
+			}
+		}
+
+		return childList;
 	}
 
 	public bool Cleanup()
 	{
-		List<Transform> children = InterfaceController.GetChildList(transform);
+		List<Transform> children = GetChildList();
 
 		if (children.Count == 0)
 		{
+			if (_subPanels.Count != 0)
+			{
+				throw new System.Exception("lost track of subPanel");
+			}
+
 			Destroy(gameObject);
+			NormalizePanelSizes();
 			return true;
 		}
 		else if (children.Count == 1)
 		{
-			InterfacePanel panel = children[0].GetComponent<InterfacePanel>();
-			if (panel != null)
+			if (children[0].GetComponent<InterfacePanelGroup>())
 			{
+				if (_subPanels.Count > 0)
+				{
+					throw new System.Exception("lost track of subPanel");
+				}
+
+				children[0].SetParent(transform.parent);
+			}
+			else
+			{
+				InterfacePanel panel = children[0].GetComponent<InterfacePanel>(); //_subPanels[0];
+
 				if (transform.parent == InterfaceController.Instance.Body)
 				{
 					panel.SetToRoot();
@@ -133,17 +187,24 @@ public class InterfacePanelGroup : MonoBehaviour
 				{
 					transform.parent.GetComponent<InterfacePanelGroup>().InsertPanel(panel);
 				}
+
+				if (_subPanels.Count > 0)
+				{
+					throw new System.Exception("should not be possible to hit this");
+				}
 			}
-			else
-			{
-				children[0].SetParent(transform.parent);
-			}
+			// else
+			// {
+			// 	throw new System.Exception("???");	//	crashes here after adding redundant checks
+			// }
 
 			Destroy(gameObject);
+			NormalizePanelSizes();
 			return true;
 		}
 		else
 		{
+			NormalizePanelSizes();
 			return false;
 		}
 	}

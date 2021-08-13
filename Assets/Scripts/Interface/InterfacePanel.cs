@@ -15,7 +15,7 @@ public class InterfacePanel : MonoBehaviour
 	public PanelEvent PanelSplitHorizontalButtonClicked;
 	public PanelEvent PanelSplitVerticalButtonClicked;
 
-	void Awake()
+	public void Initialize()
 	{
 		GetComponent<ScalablePanel>().Initialize();
 
@@ -26,6 +26,8 @@ public class InterfacePanel : MonoBehaviour
 
 	public void Initialize(string name)
 	{
+		Initialize();
+
 		PanelName.text = name;
 	}
 
@@ -33,7 +35,8 @@ public class InterfacePanel : MonoBehaviour
 	{
 		transform.SetParent(panelGroup.transform);
 		ParentPanelGroup = panelGroup;
-		gameObject.GetComponent<ScalablePanel>().ResetScale();
+		panelGroup.NormalizePanelSizes();
+		//gameObject.GetComponent<ScalablePanel>().ResetScale();
 	}
 
 	public void SetToRoot()

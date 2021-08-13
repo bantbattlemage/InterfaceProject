@@ -129,6 +129,7 @@ public class InterfaceController : MonoBehaviour
 		GameObject newPanel = Instantiate(MarketPanelPrefab, parent);
 		MarketInterfacePanel panel = newPanel.GetComponent<MarketInterfacePanel>();
 
+		panel.Initialize();
 		RegisterPanelButtonEvents(panel);
 
 		if (parent == Body)
@@ -151,8 +152,8 @@ public class InterfaceController : MonoBehaviour
 
 		GameObject newPanel = Instantiate(MapPanelPrefab, parent);
 		MapInterfacePanel panel = newPanel.GetComponent<MapInterfacePanel>();
-		panel.Initialize();
 
+		panel.Initialize();
 		RegisterPanelButtonEvents(panel);
 
 		if (parent == Body)
@@ -196,7 +197,8 @@ public class InterfaceController : MonoBehaviour
 
 		GameObject newPanel = Instantiate(DefaultInterfaceGroupPrefab, parent);
 		InterfacePanel panel = newPanel.GetComponent<InterfacePanel>();
-		panel.PanelName.text = string.Format("New Panel {0}", FindObjectsOfType<InterfacePanel>().ToList().Count);
+		string name = string.Format("New Panel {0}", FindObjectsOfType<InterfacePanel>().ToList().Count);
+		panel.Initialize(name);
 		Debug.Log(string.Format("{0} created", panel.PanelName.text));
 
 		if (parent == Body)
@@ -246,6 +248,7 @@ public class InterfaceController : MonoBehaviour
 		InterfacePanelGroup newGroup = newGroupObject.GetComponent<InterfacePanelGroup>();
 		ActivePanelGroups.Add(newGroup);
 		newGroup.InsertPanel(sender);
+		newGroup.Initialize();
 
 		Debug.Log(string.Format("{0} split", sender.PanelName.text));
 
@@ -256,14 +259,25 @@ public class InterfaceController : MonoBehaviour
 	{
 		if (!RootLevelPanels.Contains(panel))
 		{
-			if (panel.ParentPanelGroup != null)
+			if (ActivePanelGroups.Contains(panel.ParentPanelGroup))
 			{
 				int index = ActivePanelGroups.IndexOf(panel.ParentPanelGroup);
-				panel.ParentPanelGroup.RemoveAndDestroyPanel(panel);
-				if (ActivePanelGroups[index].Cleanup())
+
+				if (index < 0 || index >= ActivePanelGroups.Count)
 				{
-					ActivePanelGroups.RemoveAt(index);
+					throw new System.Exception("!?");
 				}
+
+				//Debug.Log($"index: {index} || panelgroups: {ActivePanelGroups.Count}");
+				ActivePanelGroups[index].RemoveAndDestroyPanel(panel);
+				// Debug.Log($"index: {index} || panelgroups: {ActivePanelGroups.Count}");
+				// Debug.Log(ActivePanelGroups[index].gameObject.name);
+
+
+				// if (ActivePanelGroups[index].Cleanup())
+				// {
+				// 	ActivePanelGroups.RemoveAt(index);
+				// }
 			}
 			else
 			{
