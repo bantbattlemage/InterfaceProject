@@ -4708,17 +4708,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adaca963ad3626343b40803507fe49e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ContentRoot: {fileID: 8572058331188370330}
+  PopUpLayer: {fileID: 8572058331358415235}
+  NewPanelButton: {fileID: 8572058331593005784}
+  LogInScreen: {fileID: 3110997360851071808}
   DefaultInterfaceGroupPrefab: {fileID: 9118023400931267880, guid: cf914ddd49051f64e816f31bbf1284c4, type: 3}
   HorizontalInterfaceGroupPrefab: {fileID: 9013125394864139618, guid: 4c80a6c71f4571746809ff44c64bdc64, type: 3}
   VerticalInterfaceGroupPrefab: {fileID: 3479057499809313850, guid: 6189fe1f48858474cab61d232e427401, type: 3}
   PopUpPanelPrefab: {fileID: 8075418347284183462, guid: 1bc05fd1f4867f24e945602a392de7e5, type: 3}
+  MarketPrefab: {fileID: 0}
+  MapPrefab: {fileID: 2044358866623778412, guid: eb3e16b0aa3405043b2a7cbdbb5992b6, type: 3}
+  ChatPrefab: {fileID: 8107879364131716423, guid: 6bb90207cc94cb345bd21eba69e35091, type: 3}
   LogOutPopUpPrefab: {fileID: 7331954255583074737, guid: 8b405ab0d9a1faf45a9106c2e7ade9f4, type: 3}
-  MarketPanelPrefab: {fileID: 6306647565190099213, guid: 3902d65f5d310984b837a9545b290020, type: 3}
-  MapPanelPrefab: {fileID: 2044358866623778412, guid: eb3e16b0aa3405043b2a7cbdbb5992b6, type: 3}
-  NewPanelButton: {fileID: 8572058331593005784}
-  LogInScreen: {fileID: 3110997360851071808}
-  ContentRoot: {fileID: 8572058331188370330}
-  PopUpLayer: {fileID: 8572058331358415235}
   RootLevelPanels: []
   ActivePanelGroups: []
   ActivePopUpPanels: []

@@ -117,12 +117,6 @@ public class InterfacePanelGroup : InterfaceElement
 
 		panel.gameObject.SafeDestroy();
 
-		List<InterfacePanel> newList = GetComponentsInChildren<InterfacePanel>().ToList();
-		if (newList.Contains(panel))
-		{
-			Debug.Log("panel is still a child of this object");
-		}
-
 		if (Cleanup())
 		{
 			InterfaceController.Instance.ActivePanelGroups.Remove(this);

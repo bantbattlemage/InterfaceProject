@@ -4,6 +4,13 @@ using System.Linq;
 
 public static class GameCommands
 {
+	public static string[] ValidHelpInputs = new string[] { "HLP", "HELP" };
+	public static string[] ValidNewPanelInputs = new string[] { "NEW", "PANEL" };
+	public static string[] ValidChatInputs = new string[] { "CHAT" };
+	public static string[] ValidMapInputs = new string[] { "MAP" };
+	public static string[] ValidMarketInputs = new string[] { "MKT, MARKET" };
+	public static string[] ValidLogOutInputs = new string[] { "OUT", "LOGOUT" };
+
 	public static bool ProcessCommand(string input, GameCommandInput sender)
 	{
 		input = input.ToUpper();
@@ -28,69 +35,61 @@ public static class GameCommands
 			return true;
 		}
 
-        if (ProcessMapCommand(input, sender))
-        {
-            return true;
-        }
+		if (ProcessMapCommand(input, sender))
+		{
+			return true;
+		}
+
+		if (ProcessChatCommand(input, sender))
+		{
+			return true;
+		}
 
 		return false;
 	}
 
 	public static bool ProcessNewPanelCommand(string input, GameCommandInput sender)
 	{
-		GameCommand command = new GameCommand(new string[] { "NEW" }, (Object t) =>
-		{
-			InterfaceController.Instance.CreateNewPanel((Transform)t);
-		});
-
-		if (command.ProcessCommand(input))
+		GameCommand command = new GameCommand(ValidNewPanelInputs, (Object t) =>
 		{
 			switch (sender.InputType)
 			{
 				case GameCommandInputType.CommandBar:
-					command.CommandAction(null);
+					InterfaceController.Instance.CreateNewPanel();
 					break;
 				case GameCommandInputType.InterfacePanel:
 					InterfacePanelGroup group = sender.transform.parent.parent.GetComponent<InterfacePanel>().ParentPanelGroup;
 					if (group != null)
 					{
-						command.CommandAction(group.transform);
+						InterfaceController.Instance.CreateNewPanel(group.transform);
 					}
 					else
 					{
-						command.CommandAction(null);
+						InterfaceController.Instance.CreateNewPanel();
 					}
-
 					break;
 				default:
+					Debug.LogWarning("InterfacePanel has no type?");
 					break;
 			}
+		});
 
-			return true;
-		}
-
-		return false;
+		return command.ProcessCommand(input, sender);
 	}
 
 	public static bool ProcessLogOutCommand(string input, GameCommandInput sender)
 	{
-		GameCommand command = new GameCommand(new string[] { "LOGOUT", "OUT" }, (Object t) =>
+		GameCommand command = new GameCommand(ValidLogOutInputs, (Object t) =>
 		{
 			InterfaceController.Instance.LogOut();
 		});
 
-		if (command.ProcessCommand(input))
-		{
-			command.CommandAction(null);
-			return true;
-		}
-
-		return false;
+		return command.ProcessCommand(input, sender);
 	}
 
 	public static bool ProcessHelpCommand(string input, GameCommandInput sender)
 	{
-		GameCommand command = new GameCommand(new string[] { "HELP", "HLP" }, (Object t) =>
+		GameCommand command = new GameCommand(ValidHelpInputs, (Object t) =>
 		{
 			string helpText = "Type a Command into a Command Input Field to open a new window or panel. \n"
 			+ "Command List: \n" +
@@ -100,69 +99,41 @@ public static class GameCommands
 			"MARKET, MKT: Open the market. \n" +
 			"MAP: Open the map. \n";
 
-            InterfaceController.Instance.CreateNewPopUp("Help", helpText, new PopUpButtonProperties[0]);
+			InterfaceController.Instance.CreateNewPopUp("Help", helpText, new PopUpButtonProperties[0]);
 		});
 
-		if (command.ProcessCommand(input))
-		{
-			command.CommandAction(null);
-			return true;
-		}
-
-		return false;
+		return command.ProcessCommand(input, sender);
 	}
 
 	public static bool ProcessMarketCommand(string input, GameCommandInput sender)
 	{
 		GameCommand command = new GameCommand(new string[] { "MARKET", "MKT" }, (Object t) =>
 		{
-			InterfaceController.Instance.CreateMarketPanel((Transform)t);
+			Debug.LogWarning("NOT IMPLEMENTED YET");
+			InterfaceController.Instance.CreateNewPopUp(popUpText: "NOT IMPLEMENTED YET");
+			//InterfaceController.Instance.CreateMarketPanel((Transform)t);
 		});
 
-		if (command.ProcessCommand(input))
-		{
-			if (sender.InputType == GameCommandInputType.InterfacePanel)
-			{
-				if (sender.transform.parent.parent.GetComponent<InterfacePanel>())
-				{
-					command.CommandAction(sender.transform.parent.parent);
-				}
-			}
-			else
-			{
-				command.CommandAction(null);
-			}
-
-			return true;
-		}
-
-		return false;
+		return command.ProcessCommand(input, sender);
 	}
 
-    public static bool ProcessMapCommand(string input, GameCommandInput sender)
-    {
-        GameCommand command = new GameCommand(new string[] { "MAP" }, (Object t) =>
-        {
-            InterfaceController.Instance.CreateMapPanel((Transform)t);
-        });
+	public static bool ProcessMapCommand(string input, GameCommandInput sender)
+	{
+		GameCommand command = new GameCommand(ValidMapInputs, (Object t) =>
+		{
+			InterfaceController.Instance.CreateNewPanel(InterfaceController.Instance.MapPrefab, (Transform)t);
+		});
 
-        if (command.ProcessCommand(input))
-        {
-            if (sender.InputType == GameCommandInputType.InterfacePanel)
-            {
-                if (sender.transform.parent.parent.GetComponent<InterfacePanel>())
-                {
-                    command.CommandAction(sender.transform.parent.parent);
-                }
-            }
-            else
-            {
-                command.CommandAction(null);
-            }
+		return command.ProcessCommand(input, sender);
+	}
 
-            return true;
-        }
+	public static bool ProcessChatCommand(string input, GameCommandInput sender)
+	{
+		GameCommand command = new GameCommand(ValidChatInputs, (Object t) =>
+		{
+			InterfaceController.Instance.CreateNewPanel(InterfaceController.Instance.ChatPrefab, (Transform)t);
+		});
 
-        return false;
-    }
+		return command.ProcessCommand(input, sender);
+	}
 }

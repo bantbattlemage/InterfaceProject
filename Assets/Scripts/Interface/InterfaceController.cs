@@ -5,24 +5,39 @@ using UnityEngine.UI;
 
 public class InterfaceController : MonoBehaviour
 {
+	//	Core Child object references
+	[Header("Core Child Object References")]
+	public Transform ContentRoot;
+	public Transform PopUpLayer;
+	public Button NewPanelButton;
+	public LogInScreenController LogInScreen;
+
+	//	Core prefabs
+	[Header("Core Prefabs")]
 	public GameObject DefaultInterfaceGroupPrefab;
 	public GameObject HorizontalInterfaceGroupPrefab;
 	public GameObject VerticalInterfaceGroupPrefab;
 	public GameObject PopUpPanelPrefab;
+
+	//	Panel content prefabs
+	[Header("Panel Content Prefabs")]
+	public GameObject MarketPrefab;
+	public GameObject MapPrefab;
+	public GameObject ChatPrefab;
+
+	//	Pop up content prefabs
+	[Header("Pop Up Content Prefabs")]
 	public GameObject LogOutPopUpPrefab;
-	public GameObject MarketPanelPrefab;
-	public GameObject MapPanelPrefab;
 
-	public Button NewPanelButton;
-	public LogInScreenController LogInScreen;
-
-	public Transform ContentRoot;
-	public Transform PopUpLayer;
-
+	// Runtime reference lists
+	[HideInInspector]
 	public List<InterfacePanel> RootLevelPanels = new List<InterfacePanel>();
+	[HideInInspector]
 	public List<InterfacePanelGroup> ActivePanelGroups = new List<InterfacePanelGroup>();
+	[HideInInspector]
 	public List<PopUpPanel> ActivePopUpPanels = new List<PopUpPanel>();
 
+	//	Singleton
 	private static InterfaceController _instance;
 	public static InterfaceController Instance
 	{
@@ -119,54 +134,6 @@ public class InterfaceController : MonoBehaviour
 		return newPopUpPanel;
 	}
 
-	public MarketInterfacePanel CreateMarketPanel(Transform parent = null, string targetItem = "")
-	{
-		if (parent == null)
-		{
-			parent = ContentRoot;
-		}
-
-		GameObject newPanel = Instantiate(MarketPanelPrefab, parent);
-		MarketInterfacePanel panel = newPanel.GetComponent<MarketInterfacePanel>();
-
-		panel.Initialize();
-		RegisterPanelButtonEvents(panel);
-
-		if (parent == ContentRoot)
-		{
-			RootLevelPanels.Add(panel);
-		}
-
-		ReplacePanel(panel, parent);
-
-		return panel;
-	}
-
-	public InterfacePanel CreateMapPanel(Transform parent)
-	{
-		PanelContent mapContent;
-		InterfacePanel parentPanel = null;
-
-		if (parent != null)
-		{
-			parentPanel = parent.GetComponent<InterfacePanel>();
-		}
-
-		if (parentPanel != null)
-		{
-			mapContent = Instantiate(MapPanelPrefab).GetComponent<PanelContent>();
-			parentPanel.AddContent(mapContent);
-			return parentPanel;
-		}
-		else
-		{
-			InterfacePanel newPanel = CreateNewPanel(parent);
-			mapContent = Instantiate(MapPanelPrefab).GetComponent<PanelContent>();
-			newPanel.AddContent(mapContent);
-			return newPanel;
-		}
-	}
-
 	public InterfacePanel CreateNewPanel(Transform parent = null)
 	{
 		if (parent == null)
@@ -197,6 +164,34 @@ public class InterfaceController : MonoBehaviour
 	public InterfacePanel CreateNewPanel(InterfacePanelGroup parent)
 	{
 		InterfacePanel newPanel = CreateNewPanel(parent.transform);
+		return newPanel;
+	}
+
+	public InterfacePanel CreateNewPanel(GameObject contentPrefab, Transform parent = null)
+	{
+		PanelContent content = Instantiate(contentPrefab).GetComponent<PanelContent>();
+		InterfacePanel parentPanel = null;
+
+		if (parent != null)
+		{
+			parentPanel = parent.GetComponent<InterfacePanel>();
+		}
+
+		if (parentPanel != null)
+		{
+			parentPanel.AddContent(content);
+			return parentPanel;
+		}
+		else
+		{
+			InterfacePanel newPanel = CreateNewPanel(parent);
+			newPanel.AddContent(content);
+			return newPanel;
+		}
+	}
+	public InterfacePanel CreateNewPanel(GameObject contentPrefab, InterfacePanelGroup parent)
+	{
+		InterfacePanel newPanel = CreateNewPanel(contentPrefab, parent.transform);
 		return newPanel;
 	}
 
