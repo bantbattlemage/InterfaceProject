@@ -52,7 +52,7 @@ public class InterfacePanel : InterfaceElement
 		}
 
 		InterfaceController.Instance.RootLevelPanels.Add(this);
-		transform.SetParent(InterfaceController.Instance.Body);
+		transform.SetParent(InterfaceController.Instance.ContentRoot);
 		Scale.ResetScale();
 	}
 

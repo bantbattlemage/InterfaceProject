@@ -174,7 +174,7 @@ public class InterfacePanelGroup : InterfaceElement
 			{
 				InterfacePanel panel = children[0].GetComponent<InterfacePanel>(); //_subPanels[0];
 
-				if (transform.parent == InterfaceController.Instance.Body)
+				if (transform.parent == InterfaceController.Instance.ContentRoot)
 				{
 					panel.SetToRoot();
 				}

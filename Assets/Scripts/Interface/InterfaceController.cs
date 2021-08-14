@@ -16,7 +16,7 @@ public class InterfaceController : MonoBehaviour
 	public Button NewPanelButton;
 	public LogInScreenController LogInScreen;
 
-	public Transform Body;
+	public Transform ContentRoot;
 	public Transform PopUpLayer;
 
 	public List<InterfacePanel> RootLevelPanels = new List<InterfacePanel>();
@@ -40,8 +40,8 @@ public class InterfaceController : MonoBehaviour
 
 	void Start()
 	{
-		Body.GetComponent<LayoutElement>().flexibleWidth = Screen.width;
-		Body.GetComponent<LayoutElement>().flexibleHeight = Screen.height;
+		ContentRoot.GetComponent<LayoutElement>().flexibleWidth = Screen.width;
+		ContentRoot.GetComponent<LayoutElement>().flexibleHeight = Screen.height;
 
 		//	Assign button callbacks
 		NewPanelButton.onClick.AddListener(OnNewPanelButtonClicked);
@@ -53,7 +53,7 @@ public class InterfaceController : MonoBehaviour
 
 	private void OnNewPanelButtonClicked()
 	{
-		CreateNewPanel(Body);
+		CreateNewPanel(ContentRoot);
 	}
 
 	private void OnPanelHorizontalSplitButtonClicked(InterfacePanel sender)
@@ -123,7 +123,7 @@ public class InterfaceController : MonoBehaviour
 	{
 		if (parent == null)
 		{
-			parent = Body;
+			parent = ContentRoot;
 		}
 
 		GameObject newPanel = Instantiate(MarketPanelPrefab, parent);
@@ -132,7 +132,7 @@ public class InterfaceController : MonoBehaviour
 		panel.Initialize();
 		RegisterPanelButtonEvents(panel);
 
-		if (parent == Body)
+		if (parent == ContentRoot)
 		{
 			RootLevelPanels.Add(panel);
 		}
@@ -171,16 +171,15 @@ public class InterfaceController : MonoBehaviour
 	{
 		if (parent == null)
 		{
-			parent = Body;
+			parent = ContentRoot;
 		}
 
 		GameObject newPanel = Instantiate(DefaultInterfaceGroupPrefab, parent);
 		InterfacePanel panel = newPanel.GetComponent<InterfacePanel>();
 		string name = string.Format("New Panel {0}", FindObjectsOfType<InterfacePanel>().ToList().Count);
 		panel.Initialize(name);
-		//Debug.Log(string.Format("{0} created", panel.PanelName.text));
 
-		if (parent == Body)
+		if (parent == ContentRoot)
 		{
 			RootLevelPanels.Add(panel);
 		}
@@ -219,7 +218,7 @@ public class InterfaceController : MonoBehaviour
 		}
 		else
 		{
-			parent = Body;
+			parent = ContentRoot;
 		}
 
 		GameObject newGroupObject = Instantiate(orientation == InterfacePanelGroup.InterfacePanelGroupOrientation.Vertical ? VerticalInterfaceGroupPrefab : HorizontalInterfaceGroupPrefab, parent);
