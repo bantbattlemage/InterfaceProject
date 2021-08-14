@@ -4224,7 +4224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: d5e9a96c4760e724d9ef6ecc2c7b33a9, type: 2}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.78431374}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4657,8 +4657,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Material: {fileID: 2100000, guid: 9728a8a2789cf364a93fce013e33e717, type: 2}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4729,7 +4729,7 @@ MonoBehaviour:
   PopUpPanelPrefab: {fileID: 8075418347284183462, guid: 1bc05fd1f4867f24e945602a392de7e5, type: 3}
   LogOutPopUpPrefab: {fileID: 7331954255583074737, guid: 8b405ab0d9a1faf45a9106c2e7ade9f4, type: 3}
   MarketPanelPrefab: {fileID: 6306647565190099213, guid: 3902d65f5d310984b837a9545b290020, type: 3}
-  MapPanelPrefab: {fileID: 4212687399913592453, guid: a4fcaa36476c43e46a98848f9bbd1051, type: 3}
+  MapPanelPrefab: {fileID: 2044358866623778412, guid: eb3e16b0aa3405043b2a7cbdbb5992b6, type: 3}
   NewPanelButton: {fileID: 8572058331593005784}
   LogInScreen: {fileID: 3110997360851071808}
   Body: {fileID: 8572058331188370330}

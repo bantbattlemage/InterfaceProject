@@ -142,49 +142,28 @@ public class InterfaceController : MonoBehaviour
 		return panel;
 	}
 
-
-	public MapInterfacePanel CreateMapPanel(Transform parent = null, string targetItem = "")
+	public InterfacePanel CreateMapPanel(Transform parent)
 	{
-		if (parent == null)
+		PanelContent mapContent;
+		InterfacePanel parentPanel = null;
+
+		if (parent != null)
 		{
-			parent = Body;
+			parentPanel = parent.GetComponent<InterfacePanel>();
 		}
 
-		GameObject newPanel = Instantiate(MapPanelPrefab, parent);
-		MapInterfacePanel panel = newPanel.GetComponent<MapInterfacePanel>();
-
-		panel.Initialize();
-		RegisterPanelButtonEvents(panel);
-
-		if (parent == Body)
-		{
-			RootLevelPanels.Add(panel);
-		}
-
-		ReplacePanel(panel, parent);
-
-		return panel;
-	}
-
-	public void ReplacePanel(InterfacePanel newPanel, Transform parent)
-	{
-		InterfacePanel parentPanel = parent.GetComponent<InterfacePanel>();
 		if (parentPanel != null)
 		{
-			int siblingIndex = parent.transform.GetSiblingIndex();
-
-			if (parentPanel.ParentPanelGroup != null)
-			{
-				parentPanel.ParentPanelGroup.InsertPanel(newPanel);
-				DestroyPanel(parentPanel);
-			}
-			else
-			{
-				newPanel.SetToRoot();
-				DestroyPanel(parentPanel);
-			}
-
-			newPanel.transform.SetSiblingIndex(siblingIndex);
+			mapContent = Instantiate(MapPanelPrefab).GetComponent<PanelContent>();
+			parentPanel.AddContent(mapContent);
+			return parentPanel;
+		}
+		else
+		{
+			InterfacePanel newPanel = CreateNewPanel(parent);
+			mapContent = Instantiate(MapPanelPrefab).GetComponent<PanelContent>();
+			newPanel.AddContent(mapContent);
+			return newPanel;
 		}
 	}
 
@@ -216,17 +195,17 @@ public class InterfaceController : MonoBehaviour
 		return panel;
 	}
 
+	public InterfacePanel CreateNewPanel(InterfacePanelGroup parent)
+	{
+		InterfacePanel newPanel = CreateNewPanel(parent.transform);
+		return newPanel;
+	}
+
 	public void RegisterPanelButtonEvents(InterfacePanel panel)
 	{
 		panel.PanelCloseButtonClicked += OnPanelCloseButtonClicked;
 		panel.PanelSplitHorizontalButtonClicked += OnPanelHorizontalSplitButtonClicked;
 		panel.PanelSplitVerticalButtonClicked += OnPanelVerticalSplitButtonClicked;
-	}
-
-	public InterfacePanel CreateNewPanel(InterfacePanelGroup parent)
-	{
-		InterfacePanel newPanel = CreateNewPanel(parent.transform);
-		return newPanel;
 	}
 
 	private void SplitPanel(InterfacePanel sender, InterfacePanelGroup.InterfacePanelGroupOrientation orientation)
@@ -250,8 +229,6 @@ public class InterfaceController : MonoBehaviour
 		newGroup.InsertPanel(sender);
 		newGroup.Initialize();
 
-		//Debug.Log(string.Format("{0} split", sender.PanelName.text));
-
 		CreateNewPanel(newGroup);
 	}
 
@@ -268,16 +245,7 @@ public class InterfaceController : MonoBehaviour
 					throw new System.Exception("!?");
 				}
 
-				//Debug.Log($"index: {index} || panelgroups: {ActivePanelGroups.Count}");
 				ActivePanelGroups[index].RemoveAndDestroyPanel(panel);
-				// Debug.Log($"index: {index} || panelgroups: {ActivePanelGroups.Count}");
-				// Debug.Log(ActivePanelGroups[index].gameObject.name);
-
-
-				// if (ActivePanelGroups[index].Cleanup())
-				// {
-				// 	ActivePanelGroups.RemoveAt(index);
-				// }
 			}
 			else
 			{
@@ -297,6 +265,26 @@ public class InterfaceController : MonoBehaviour
 				ActivePanelGroups.RemoveAt(i);
 			}
 		}
+	}
+
+	public void ReplacePanel(InterfacePanel newPanel, Transform parent)
+	{
+		InterfacePanel parentPanel = parent.GetComponent<InterfacePanel>();
+
+		int siblingIndex = parent.transform.GetSiblingIndex();
+
+		if (parentPanel.ParentPanelGroup != null)
+		{
+			parentPanel.ParentPanelGroup.InsertPanel(newPanel);
+			DestroyPanel(parentPanel);
+		}
+		else
+		{
+			newPanel.SetToRoot();
+			DestroyPanel(parentPanel);
+		}
+
+		newPanel.transform.SetSiblingIndex(siblingIndex);
 	}
 
 	public static List<Transform> GetChildList(Transform target)

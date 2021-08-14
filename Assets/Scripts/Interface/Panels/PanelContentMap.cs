@@ -1,15 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class MapInterfacePanel : InterfacePanel
+public class PanelContentMap : PanelContent
 {
-	public RectTransform RenderImageTransform;
 	public Camera RenderTextureCamera { get; private set; }
 	private RenderTextureRaycast _renderTextureRaycast;
 
-	new public void Initialize()
+	public override void Initialize()
 	{
 		base.Initialize();
 
