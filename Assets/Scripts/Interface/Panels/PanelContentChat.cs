@@ -1,11 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PanelContentChat : PanelContent
 {
 	public RectTransform MessagesRoot;
 	public GameObject ChatMessagePrefab;
+	public InputField TextField;
+	public ScrollRect ScrollArea;
 
 	public List<ChatMessage> ChatMessages;
 
@@ -23,10 +25,51 @@ public class PanelContentChat : PanelContent
 			throw new System.Exception("tried to initialize chat window already initialized");
 		}
 
+		TextField.onEndEdit.AddListener((x) => { if (Input.GetKeyDown(KeyCode.Return)) SubmitMessage(x); });
+
+		ScrollArea.onValueChanged.AddListener((vector) =>
+		{
+			if (vector.y == 1)
+			{
+				OnScrollTopHit();
+			}
+		});
+
 		ChatMessages = new List<ChatMessage>();
 		MessagesRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
 
-		for (int i = 0; i < numberOfChatMessages; i++)
+		AddTestMessages();
+	}
+
+	public void SubmitMessage(string message)
+	{
+		AddMessage(message);
+	}
+
+	public void AddMessage(string message = "")
+	{
+		GameObject newChatMessageObject = Instantiate(ChatMessagePrefab);
+		ChatMessage newChatMessage = newChatMessageObject.GetComponent<ChatMessage>();
+		ChatMessages.Add(newChatMessage);
+		newChatMessage.Initialize();
+		newChatMessage.SetText(message);
+		newChatMessageObject.transform.SetParent(MessagesRoot);
+		// newChatMessageObject.transform.SetSiblingIndex(0);
+
+		RectTransform newMessageTransform = newChatMessageObject.GetComponent<RectTransform>();
+
+		float size = MessagesRoot.rect.height + newMessageTransform.rect.height;
+		MessagesRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
+	}
+
+	private void OnScrollTopHit()
+	{
+		AddTestMessages();
+	}
+
+	private void AddTestMessages(int numberOFMessages = 20)
+	{
+		for (int i = 0; i < 20; i++)
 		{
 			int random = Random.Range(1, 10);
 			string s = $"{i} ({random}): ";
@@ -38,21 +81,5 @@ public class PanelContentChat : PanelContent
 
 			AddMessage(s);
 		}
-	}
-
-	public void AddMessage(string message = "")
-	{
-		GameObject newChatMessageObject = Instantiate(ChatMessagePrefab);
-		ChatMessage newChatMessage = newChatMessageObject.GetComponent<ChatMessage>();
-		ChatMessages.Add(newChatMessage);
-		newChatMessage.Initialize();
-		newChatMessage.SetText(message);
-		newChatMessageObject.transform.SetParent(MessagesRoot);
-		newChatMessageObject.transform.SetSiblingIndex(0);
-
-		RectTransform newMessageTransform = newChatMessageObject.GetComponent<RectTransform>();
-
-		float size = MessagesRoot.rect.height + newMessageTransform.rect.height;
-		MessagesRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
 	}
 }

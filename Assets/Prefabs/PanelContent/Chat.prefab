@@ -544,9 +544,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: -1
+  m_MinHeight: 80
   m_PreferredWidth: -1
-  m_PreferredHeight: 100
+  m_PreferredHeight: 80
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -982,6 +982,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MessagesRoot: {fileID: 5764782607619509475}
   ChatMessagePrefab: {fileID: 5413972649230490100, guid: 96d04c9fade9cdf4183a1fc58bef1353, type: 3}
+  TextField: {fileID: 7396233896566837477}
+  ScrollArea: {fileID: 1504554499528208460}
   ChatMessages: []
 --- !u!114 &4926427277209328520
 MonoBehaviour:
@@ -1134,11 +1136,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 18
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 10
-    m_MaxSize: 36
+    m_MinSize: 8
+    m_MaxSize: 18
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 0

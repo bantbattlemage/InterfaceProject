@@ -7,7 +7,7 @@ public class SelectableText : MonoBehaviour
 {
 	public float Padding = 30;
 
-	public InputField Input { get { if (_text == null) { _text = GetComponent<InputField>(); } return _text; } }
+	public InputField TextField { get { if (_text == null) { _text = GetComponent<InputField>(); } return _text; } }
 	private InputField _text;
 
 	public static string LoremIpsum { get { return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum aliquam turpis non suscipit rhoncus. Nulla lectus nisi, tempor ut imperdiet eu, ultricies vitae neque. Duis sollicitudin lorem eget luctus cursus."; } }
@@ -18,16 +18,17 @@ public class SelectableText : MonoBehaviour
 
 	void OnGUI()
 	{
-		Text t = Input.textComponent;
+		Text t = TextField.textComponent;
 		float size = (t.cachedTextGenerator.lines.Count * CalculateLineHeight(t) + Padding);
 		GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
 	}
 
 	public virtual void SetText(string text, bool setHeight = true)
 	{
-		Text t = Input.textComponent;
-		Input.text = text;
-		Canvas.ForceUpdateCanvases();
+		Text t = TextField.textComponent;
+		TextField.text = text;
+
+		// Canvas.ForceUpdateCanvases();
 
 		// float size = (t.cachedTextGenerator.lines.Count * CalculateLineHeight(t));
 		// GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
