@@ -62,7 +62,6 @@ public class InterfaceController : MonoBehaviour
 		NewPanelButton.onClick.AddListener(OnNewPanelButtonClicked);
 
 		//	Set up Log In Screen
-		LogInScreen.InitializeLogInScreen();
 		LogInScreen.OnSuccessfulLogin += LogIn;
 	}
 

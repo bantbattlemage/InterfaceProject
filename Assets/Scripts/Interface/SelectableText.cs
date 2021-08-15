@@ -5,11 +5,53 @@ using UnityEngine.UI;
 
 public class SelectableText : MonoBehaviour
 {
-	public InputField Text { get { if (_text == null) { _text = GetComponent<InputField>(); } return _text; } }
+	public float Padding = 30;
+
+	public InputField Input { get { if (_text == null) { _text = GetComponent<InputField>(); } return _text; } }
 	private InputField _text;
 
+	public static string LoremIpsum { get { return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum aliquam turpis non suscipit rhoncus. Nulla lectus nisi, tempor ut imperdiet eu, ultricies vitae neque. Duis sollicitudin lorem eget luctus cursus."; } }
 	void Awake()
 	{
-		Text.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum aliquam turpis non suscipit rhoncus. Nulla lectus nisi, tempor ut imperdiet eu, ultricies vitae neque. Duis sollicitudin lorem eget luctus cursus. Donec id est nisl. Proin mollis maximus enim a pretium. Nunc urna tortor, condimentum sed lacinia vitae, interdum quis orci. Quisque in porta nibh. Vivamus consequat iaculis odio ac malesuada. Praesent ac purus eu sapien dignissim fringilla ut id libero. Donec nec arcu lorem. Praesent fermentum urna leo, et fringilla sem molestie eu. Nulla vitae mollis eros. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut rutrum quam purus, nec elementum tellus sodales eu. Quisque posuere et nibh ut finibus. Aenean posuere, sapien at ornare convallis, sapien elit maximus quam, in pulvinar nisl elit semper nulla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum aliquam turpis non suscipit rhoncus. Nulla lectus nisi, tempor ut imperdiet eu, ultricies vitae neque. Duis sollicitudin lorem eget luctus cursus. Donec id est nisl. Proin mollis maximus enim a pretium. Nunc urna tortor, condimentum sed lacinia vitae, interdum quis orci. Quisque in porta nibh. Vivamus consequat iaculis odio ac malesuada. Praesent ac purus eu sapien dignissim fringilla ut id libero. Donec nec arcu lorem. Praesent fermentum urna leo, et fringilla sem molestie eu. Nulla vitae mollis eros. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut rutrum quam purus, nec elementum tellus sodales eu. Quisque posuere et nibh ut finibus. Aenean posuere, sapien at ornare convallis, sapien elit maximus quam, in pulvinar nisl elit semper nulla.";
+		SetText(LoremIpsum);
+	}
+
+	void OnGUI()
+	{
+		Text t = Input.textComponent;
+		float size = (t.cachedTextGenerator.lines.Count * CalculateLineHeight(t) + Padding);
+		GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
+	}
+
+	public virtual void SetText(string text, bool setHeight = true)
+	{
+		Text t = Input.textComponent;
+		Input.text = text;
+		Canvas.ForceUpdateCanvases();
+
+		// float size = (t.cachedTextGenerator.lines.Count * CalculateLineHeight(t));
+		// GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
+
+		// for (int i = 0; i < myText.cachedTextGenerator.lines.Count; i++)
+		// {
+		// 	int startIndex = myText.cachedTextGenerator.lines[i].startCharIdx;
+		// 	int endIndex = (i == myText.cachedTextGenerator.lines.Count - 1) ? myText.text.Length
+		// 		: myText.cachedTextGenerator.lines[i + 1].startCharIdx;
+		// 	int length = endIndex - startIndex;
+		// 	Debug.Log(myText.text.Substring(startIndex, length));
+		// }
+	}
+
+	private float CalculateLineHeight(Text text)
+	{
+		var extents = text.cachedTextGenerator.rectExtents.size * 0.5f;
+		var lineHeight = text.cachedTextGeneratorForLayout.GetPreferredHeight("A", text.GetGenerationSettings(extents));
+
+		return lineHeight * text.lineSpacing;
+
+		// var extents = text.cachedTextGenerator.rectExtents.size * 0.5f;
+		// var setting = text.GetGenerationSettings(extents);
+		// var lineHeight = text.cachedTextGeneratorForLayout.GetPreferredHeight("A", setting);
+		// return lineHeight * text.lineSpacing / setting.scaleFactor;
 	}
 }

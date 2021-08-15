@@ -8,4 +8,9 @@ public class PanelContent : MonoBehaviour
 	{
 
 	}
+
+	public virtual void Initialize(int number)
+	{
+		Initialize();
+	}
 }

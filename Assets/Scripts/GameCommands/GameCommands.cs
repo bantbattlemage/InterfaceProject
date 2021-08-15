@@ -131,7 +131,9 @@ public static class GameCommands
 	{
 		GameCommand command = new GameCommand(ValidChatInputs, (Object t) =>
 		{
-			InterfaceController.Instance.CreateNewPanel(InterfaceController.Instance.ChatPrefab, (Transform)t);
+			InterfacePanel chatPanel = InterfaceController.Instance.CreateNewPanel(InterfaceController.Instance.ChatPrefab, (Transform)t);
+			PanelContent chat = chatPanel.ContentObjects[0] as PanelContentChat;
+			chat.Initialize(20);
 		});
 
 		return command.ProcessCommand(input, sender);
