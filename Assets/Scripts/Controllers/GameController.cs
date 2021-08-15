@@ -4,6 +4,7 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
 	public string ServerURL = "";
+	public bool LogInEnabled;
 
 	public GameObject PlayerControllerPrefab;
 

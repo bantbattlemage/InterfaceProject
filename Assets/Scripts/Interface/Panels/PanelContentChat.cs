@@ -29,7 +29,15 @@ public class PanelContentChat : PanelContent
 		}
 
 		TextField.characterLimit = CharacterLimit;
-		TextField.onEndEdit.AddListener((x) => { if (Input.GetKeyDown(KeyCode.Return)) SubmitMessage(x); });
+		TextField.onEndEdit.AddListener((x) =>
+		{
+			if (Input.GetKeyDown(KeyCode.Return))
+			{
+				SubmitMessage(x);
+			}
+
+			TextField.text = "";
+		});
 
 		ScrollArea.onValueChanged.AddListener((vector) =>
 		{
@@ -42,7 +50,7 @@ public class PanelContentChat : PanelContent
 		ChatMessages = new List<ChatMessage>();
 		MessagesRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
 
-		AddTestMessages();
+		AddTestMessages(100);
 	}
 
 	public void SubmitMessage(string message)
@@ -54,7 +62,7 @@ public class PanelContentChat : PanelContent
 	{
 		if (message.Length > CharacterLimit)
 		{
-			Debug.LogWarning($"Tried to add message longer than character count of {CharacterLimit} ({message.Length})");
+			InterfaceController.Instance.LogWarning($"Tried to add message longer than character count of {CharacterLimit} ({message.Length})");
 			return;
 		}
 

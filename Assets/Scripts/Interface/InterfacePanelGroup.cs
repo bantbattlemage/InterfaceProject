@@ -73,7 +73,7 @@ public class InterfacePanelGroup : InterfaceElement
 	{
 		if (_subPanels.Contains(panel))
 		{
-			throw new System.Exception("Panel already in this group!");
+			InterfaceController.Instance.ThrowError("Panel already in this group!");
 		}
 
 		if (InterfaceController.Instance.RootLevelPanels.Contains(panel))
@@ -93,12 +93,12 @@ public class InterfacePanelGroup : InterfaceElement
 	{
 		if (panel == null || panel.gameObject == null)
 		{
-			throw new System.Exception("null panel");
+			InterfaceController.Instance.ThrowError("null panel");
 		}
 
 		if (!_subPanels.Contains(panel))
 		{
-			throw new System.Exception("Tried to remove panel not in group");
+			InterfaceController.Instance.ThrowError("Tried to remove panel not in group");
 		}
 
 		_subPanels.Remove(panel);
@@ -108,7 +108,7 @@ public class InterfacePanelGroup : InterfaceElement
 	{
 		if (!_subPanels.Contains(panel))
 		{
-			throw new System.Exception("Tried to remove panel that is not in group");
+			InterfaceController.Instance.ThrowError("Tried to remove panel that is not in group");
 		}
 
 		List<InterfacePanel> p = GetComponentsInChildren<InterfacePanel>().ToList();
@@ -146,7 +146,7 @@ public class InterfacePanelGroup : InterfaceElement
 		{
 			if (_subPanels.Count != 0)
 			{
-				throw new System.Exception("lost track of subPanel");
+				InterfaceController.Instance.ThrowError("lost track of subPanel");
 			}
 
 			gameObject.SafeDestroy();
@@ -159,7 +159,7 @@ public class InterfacePanelGroup : InterfaceElement
 			{
 				if (_subPanels.Count > 0)
 				{
-					throw new System.Exception("lost track of subPanel");
+					InterfaceController.Instance.ThrowError("lost track of subPanel");
 				}
 
 				children[0].SetParent(transform.parent);
@@ -179,7 +179,7 @@ public class InterfacePanelGroup : InterfaceElement
 
 				if (_subPanels.Count > 0)
 				{
-					throw new System.Exception("should not be possible to hit this");
+					InterfaceController.Instance.ThrowError("should not be possible to hit this");
 				}
 			}
 

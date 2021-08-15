@@ -18,7 +18,7 @@ public static class GameObjectExtensions
 		eventData = new PointerEventData(EventSystem.current);
 		eventData.position = mousePos;
 
-		Debug.LogWarning(eventData.position);
+		InterfaceController.Instance.LogWarning(eventData.position.ToString());
 
 		List<Transform> children = source.transform.GetComponentsInChildren<Transform>().ToList();
 		children.Remove(source.transform);
@@ -32,7 +32,7 @@ public static class GameObjectExtensions
 		for (int index = 0; index < raycastResults.Count; index++)
 		{
 			RaycastResult curRaysastResult = raycastResults[index];
-			Debug.LogWarning(curRaysastResult.gameObject.name);
+			InterfaceController.Instance.LogWarning(curRaysastResult.gameObject.name);
 			curRaysastResult.gameObject.name = "HIT !!!";
 
 			if (curRaysastResult.gameObject.transform.parent == source)

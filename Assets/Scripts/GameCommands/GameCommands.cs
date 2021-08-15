@@ -69,7 +69,7 @@ public static class GameCommands
 					}
 					break;
 				default:
-					Debug.LogWarning("InterfacePanel has no type?");
+					InterfaceController.Instance.LogWarning("InterfacePanel has no type?");
 					break;
 			}
 		});
@@ -109,8 +109,7 @@ public static class GameCommands
 	{
 		GameCommand command = new GameCommand(new string[] { "MARKET", "MKT" }, (Object t) =>
 		{
-			Debug.LogWarning("NOT IMPLEMENTED YET");
-			InterfaceController.Instance.CreateNewPopUp(popUpText: "NOT IMPLEMENTED YET");
+			InterfaceController.Instance.LogWarning("NOT IMPLEMENTED YET");
 			//InterfaceController.Instance.CreateMarketPanel((Transform)t);
 		});
 

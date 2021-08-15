@@ -41,7 +41,7 @@ public class InterfacePanel : InterfaceElement
 	{
 		if (InterfaceController.Instance.RootLevelPanels.Contains(this))
 		{
-			throw new System.Exception("Already in root");
+			InterfaceController.Instance.ThrowError("Panel already in root");
 		}
 
 		if (ParentPanelGroup != null)

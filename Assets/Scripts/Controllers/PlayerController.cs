@@ -13,8 +13,12 @@ public class PlayerController : MonoBehaviour
 		{
 			GameObject playerInterface = Instantiate(InterfacePrefab, transform);
 			PlayerInterface = playerInterface.GetComponent<InterfaceController>();
-			// PlayerInterface.LogInScreen.gameObject.SetActive(true);
-			//PlayerInterface.LogInScreen.InitializeLogInScreen();
+		}
+
+		if (GameController.Instance.LogInEnabled)
+		{
+			PlayerInterface.LogInScreen.gameObject.SetActive(true);
+			PlayerInterface.LogInScreen.InitializeLogInScreen();
 		}
 	}
 }

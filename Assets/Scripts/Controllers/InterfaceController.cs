@@ -93,7 +93,7 @@ public class InterfaceController : MonoBehaviour
 	{
 		if (!ActivePopUpPanels.Contains(sender))
 		{
-			throw new System.Exception("stray pop up?");
+			InterfaceController.Instance.ThrowError("stray pop up?");
 		}
 
 		ActivePopUpPanels.Remove(sender);
@@ -239,14 +239,14 @@ public class InterfaceController : MonoBehaviour
 
 				if (index < 0 || index >= ActivePanelGroups.Count)
 				{
-					throw new System.Exception("!?");
+					InterfaceController.Instance.ThrowError("!?");
 				}
 
 				ActivePanelGroups[index].RemoveAndDestroyPanel(panel);
 			}
 			else
 			{
-				throw new System.Exception("panel not being tracked?");
+				InterfaceController.Instance.ThrowError("panel not being tracked?");
 			}
 		}
 		else
@@ -297,5 +297,31 @@ public class InterfaceController : MonoBehaviour
 		}
 
 		return childList;
+	}
+
+	public void LogWarning(string warningMessage)
+	{
+		CreateNewPopUp(popUpText: warningMessage);
+		Debug.LogWarning(warningMessage);
+	}
+
+	public void ThrowError(System.Exception error, bool throwException = true)
+	{
+		CreateNewPopUp(popUpText: error.ToString());
+
+		if (throwException)
+		{
+			throw error;
+		}
+	}
+
+	public void ThrowError(string error, bool throwException = true)
+	{
+		CreateNewPopUp(popUpText: error);
+
+		if (throwException)
+		{
+			throw new System.Exception(error);
+		}
 	}
 }

@@ -39,7 +39,8 @@ public class PanelScaleButton : Button
 				break;
 			default:
 				scaleMode = ScaleMode.Top;
-				throw new System.Exception("???");
+				InterfaceController.Instance.ThrowError("???");
+				break;
 		}
 
 		OnPanelScaleButtonMouseDown(scaleMode, eventData);

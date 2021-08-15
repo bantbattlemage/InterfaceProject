@@ -37,8 +37,7 @@ public class LogInScreenController : MonoBehaviour
 		{
 			if (r.Error != null)
 			{
-				InterfaceController.Instance.CreateNewPopUp(popUpText: r.Error);
-				Debug.LogWarning(r.Error);
+				InterfaceController.Instance.LogWarning(r.Error);
 			}
 			else
 			{
@@ -53,7 +52,7 @@ public class LogInScreenController : MonoBehaviour
 				}
 				else
 				{
-					InterfaceController.Instance.CreateNewPopUp(popUpText: response.Message);
+					InterfaceController.Instance.LogWarning(response.Message);
 				}
 			}
 		}));

@@ -45,11 +45,19 @@ public class LogInPopUpPanel : PopUpPanel
 
 	public void OnLogInButtonPressed(string userName, string password)
 	{
+		LogInField.text = "";
+		PasswordField.text = "";
+		EmailField.text = "";
+
 		LogInSubmit(userName, password, "");
 	}
 
 	public void OnRegisterButtonPressed(string userName, string password, string email)
 	{
+		LogInField.text = "";
+		PasswordField.text = "";
+		EmailField.text = "";
+
 		RegisterSubmit(userName, password, email);
 	}
 }
