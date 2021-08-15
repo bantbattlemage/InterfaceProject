@@ -9,10 +9,13 @@ public class SelectableText : MonoBehaviour
 
 	public InputField TextField { get { if (_text == null) { _text = GetComponent<InputField>(); } return _text; } }
 	private InputField _text;
+	private RectTransform _rect;
 
 	public static string LoremIpsum { get { return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum aliquam turpis non suscipit rhoncus. Nulla lectus nisi, tempor ut imperdiet eu, ultricies vitae neque. Duis sollicitudin lorem eget luctus cursus."; } }
 	void Awake()
 	{
+		_rect = GetComponent<RectTransform>();
+
 		SetText(LoremIpsum);
 	}
 
@@ -20,7 +23,11 @@ public class SelectableText : MonoBehaviour
 	{
 		Text t = TextField.textComponent;
 		float size = (t.cachedTextGenerator.lines.Count * CalculateLineHeight(t) + Padding);
-		GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
+
+		if (size != _rect.rect.size.y)
+		{
+			_rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
+		}
 	}
 
 	public virtual void SetText(string text, bool setHeight = true)

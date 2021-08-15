@@ -15,7 +15,11 @@ public class PanelContentChat : PanelContent
 	{
 		float size = 0;
 		ChatMessages.ForEach(x => size += x.GetComponent<RectTransform>().rect.height);
-		MessagesRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
+
+		if (size != MessagesRoot.rect.size.y)
+		{
+			MessagesRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
+		}
 	}
 
 	public override void Initialize(int numberOfChatMessages = 20)
@@ -54,22 +58,20 @@ public class PanelContentChat : PanelContent
 		newChatMessage.Initialize();
 		newChatMessage.SetText(message);
 		newChatMessageObject.transform.SetParent(MessagesRoot);
-		// newChatMessageObject.transform.SetSiblingIndex(0);
 
 		RectTransform newMessageTransform = newChatMessageObject.GetComponent<RectTransform>();
-
 		float size = MessagesRoot.rect.height + newMessageTransform.rect.height;
 		MessagesRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
 	}
 
 	private void OnScrollTopHit()
 	{
-		AddTestMessages();
+		AddTestMessages(5);
 	}
 
 	private void AddTestMessages(int numberOFMessages = 20)
 	{
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < numberOFMessages; i++)
 		{
 			int random = Random.Range(1, 10);
 			string s = $"{i} ({random}): ";
