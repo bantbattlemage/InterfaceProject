@@ -6,6 +6,6 @@ public class ChatMessage : SelectableText
 {
 	public void Initialize()
 	{
-
+		TextField.characterLimit = PanelContentChat.CharacterLimit;
 	}
 }

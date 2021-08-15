@@ -169,6 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67d9ee6fc7c1506459b45775529773b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Padding: 30
 --- !u!114 &8894375171058433890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,7 +220,7 @@ MonoBehaviour:
   m_LineType: 2
   m_HideMobileInput: 0
   m_CharacterValidation: 0
-  m_CharacterLimit: 0
+  m_CharacterLimit: 1000
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []

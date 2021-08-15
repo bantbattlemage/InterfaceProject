@@ -16,7 +16,7 @@ public class GameController : MonoBehaviour
 		{
 			if (_instance == null)
 			{
-				_instance = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+				_instance = GameObject.FindObjectOfType<GameController>();
 			}
 
 			return _instance;

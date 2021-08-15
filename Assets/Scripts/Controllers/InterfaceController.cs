@@ -43,18 +43,22 @@ public class InterfaceController : MonoBehaviour
 	{
 		get
 		{
-			if (_instance)
+			if (_instance != null)
 			{
 				return _instance;
 			}
 
-			_instance = GameObject.FindGameObjectWithTag("InterfaceController").GetComponent<InterfaceController>();
+			_instance = FindObjectOfType<InterfaceController>();
 			return _instance;
 		}
 	}
 
 	void Start()
 	{
+		RootLevelPanels = new List<InterfacePanel>();
+		ActivePanelGroups = new List<InterfacePanelGroup>();
+		ActivePopUpPanels = new List<PopUpPanel>();
+
 		ContentRoot.GetComponent<LayoutElement>().flexibleWidth = Screen.width;
 		ContentRoot.GetComponent<LayoutElement>().flexibleHeight = Screen.height;
 

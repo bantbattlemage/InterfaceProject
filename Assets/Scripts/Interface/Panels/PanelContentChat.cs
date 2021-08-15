@@ -11,15 +11,14 @@ public class PanelContentChat : PanelContent
 
 	public List<ChatMessage> ChatMessages;
 
-	void OnGUI()
-	{
-		float size = 0;
-		ChatMessages.ForEach(x => size += x.GetComponent<RectTransform>().rect.height);
+	public static int CharacterLimit { get { return 1000; } }
 
-		if (size != MessagesRoot.rect.size.y)
-		{
-			MessagesRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
-		}
+	public RectTransform Rect { get { if (_rect == null) { _rect = GetComponent<RectTransform>(); } return _rect; } }
+	private RectTransform _rect;
+
+	void Update()
+	{
+		AdjustSize();
 	}
 
 	public override void Initialize(int numberOfChatMessages = 20)
@@ -29,11 +28,12 @@ public class PanelContentChat : PanelContent
 			throw new System.Exception("tried to initialize chat window already initialized");
 		}
 
+		TextField.characterLimit = CharacterLimit;
 		TextField.onEndEdit.AddListener((x) => { if (Input.GetKeyDown(KeyCode.Return)) SubmitMessage(x); });
 
 		ScrollArea.onValueChanged.AddListener((vector) =>
 		{
-			if (vector.y == 1)
+			if (vector.y >= 0.98f)
 			{
 				OnScrollTopHit();
 			}
@@ -52,16 +52,21 @@ public class PanelContentChat : PanelContent
 
 	public void AddMessage(string message = "")
 	{
+		if (message.Length > CharacterLimit)
+		{
+			Debug.LogWarning($"Tried to add message longer than character count of {CharacterLimit} ({message.Length})");
+			return;
+		}
+
 		GameObject newChatMessageObject = Instantiate(ChatMessagePrefab);
 		ChatMessage newChatMessage = newChatMessageObject.GetComponent<ChatMessage>();
-		ChatMessages.Add(newChatMessage);
 		newChatMessage.Initialize();
 		newChatMessage.SetText(message);
 		newChatMessageObject.transform.SetParent(MessagesRoot);
+		ChatMessages.Add(newChatMessage);
+		ChatMessages.ForEach(x => x.AdjustSize());
 
-		RectTransform newMessageTransform = newChatMessageObject.GetComponent<RectTransform>();
-		float size = MessagesRoot.rect.height + newMessageTransform.rect.height;
-		MessagesRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
+		AdjustSize();
 	}
 
 	private void OnScrollTopHit()
@@ -69,11 +74,22 @@ public class PanelContentChat : PanelContent
 		AddTestMessages(5);
 	}
 
+	public void AdjustSize()
+	{
+		float size = 0;
+		foreach (ChatMessage mesage in ChatMessages) { size += mesage.Rect.rect.height; }
+
+		if (size != MessagesRoot.rect.size.y)
+		{
+			MessagesRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
+		}
+	}
+
 	private void AddTestMessages(int numberOFMessages = 20)
 	{
 		for (int i = 0; i < numberOFMessages; i++)
 		{
-			int random = Random.Range(1, 10);
+			int random = Random.Range(1, 5);
 			string s = $"{i} ({random}): ";
 
 			for (int k = 0; k < random; k++)

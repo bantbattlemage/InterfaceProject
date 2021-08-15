@@ -8,46 +8,39 @@ public class SelectableText : MonoBehaviour
 	public float Padding = 30;
 
 	public InputField TextField { get { if (_text == null) { _text = GetComponent<InputField>(); } return _text; } }
+	public RectTransform Rect { get { if (_rect == null) { _rect = GetComponent<RectTransform>(); } return _rect; } }
+
 	private InputField _text;
 	private RectTransform _rect;
 
 	public static string LoremIpsum { get { return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum aliquam turpis non suscipit rhoncus. Nulla lectus nisi, tempor ut imperdiet eu, ultricies vitae neque. Duis sollicitudin lorem eget luctus cursus."; } }
+
 	void Awake()
 	{
-		_rect = GetComponent<RectTransform>();
-
 		SetText(LoremIpsum);
 	}
 
-	void OnGUI()
+	void Update()
 	{
-		Text t = TextField.textComponent;
-		float size = (t.cachedTextGenerator.lines.Count * CalculateLineHeight(t) + Padding);
-
-		if (size != _rect.rect.size.y)
-		{
-			_rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
-		}
+		AdjustSize();
 	}
 
 	public virtual void SetText(string text, bool setHeight = true)
 	{
-		Text t = TextField.textComponent;
 		TextField.text = text;
+		Canvas.ForceUpdateCanvases();
+		AdjustSize();
+	}
 
-		// Canvas.ForceUpdateCanvases();
+	public void AdjustSize()
+	{
+		Text t = TextField.textComponent;
+		float size = (t.cachedTextGenerator.lines.Count * CalculateLineHeight(t)) + Padding;
 
-		// float size = (t.cachedTextGenerator.lines.Count * CalculateLineHeight(t));
-		// GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
-
-		// for (int i = 0; i < myText.cachedTextGenerator.lines.Count; i++)
-		// {
-		// 	int startIndex = myText.cachedTextGenerator.lines[i].startCharIdx;
-		// 	int endIndex = (i == myText.cachedTextGenerator.lines.Count - 1) ? myText.text.Length
-		// 		: myText.cachedTextGenerator.lines[i + 1].startCharIdx;
-		// 	int length = endIndex - startIndex;
-		// 	Debug.Log(myText.text.Substring(startIndex, length));
-		// }
+		if (size != Rect.rect.size.y)
+		{
+			Rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
+		}
 	}
 
 	private float CalculateLineHeight(Text text)
