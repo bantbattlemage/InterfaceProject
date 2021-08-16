@@ -775,6 +775,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4710748145248842050, guid: 01d42da3cd93fe64d94dda3aa81b7660, type: 3}
+      propertyPath: UseLocalHost
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4710748145248842051, guid: 01d42da3cd93fe64d94dda3aa81b7660, type: 3}
       propertyPath: m_RootOrder
       value: 0

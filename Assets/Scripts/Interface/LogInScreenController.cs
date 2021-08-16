@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using RestClient.Core;
 using UnityEngine;
+using GameComms;
 
 public class LogInScreenController : MonoBehaviour
 {
