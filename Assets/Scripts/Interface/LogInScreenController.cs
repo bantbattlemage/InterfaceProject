@@ -47,6 +47,7 @@ public class LogInScreenController : MonoBehaviour
 
 				if (response.Success)
 				{
+					GameController.Instance.SessionToken = password;
 					LogInPopUp.ClosePopUp();
 					OnSuccessfulLogin();
 				}
