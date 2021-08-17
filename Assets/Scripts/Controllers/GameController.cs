@@ -37,10 +37,5 @@ public class GameController : MonoBehaviour
 		GameObject newPlayerObject = Instantiate(PlayerControllerPrefab);
 		Player = newPlayerObject.GetComponent<PlayerController>();
 		Player.Initialize();
-
-		// StartCoroutine(RestWebClient.Instance.HttpGet(GameController.Instance.ServerURL + "player/", (r) =>
-		// {
-		// 	Debug.Log(r.Data);
-		// }));
 	}
 }

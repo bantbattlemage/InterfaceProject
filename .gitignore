@@ -40,3 +40,4 @@ sysinfo.txt
 .fake
 .ionide
 *.log
+Logs/ApiUpdaterCheck.txt

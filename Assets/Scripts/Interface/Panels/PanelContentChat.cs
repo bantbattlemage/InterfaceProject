@@ -9,7 +9,7 @@ public class PanelContentChat : PanelContent
 	public InputField TextField;
 	public ScrollRect ScrollArea;
 
-	public List<ChatMessage> ChatMessages;
+	public List<ChatMessageContainer> ChatMessages;
 
 	public static int CharacterLimit { get { return 1000; } }
 
@@ -47,7 +47,7 @@ public class PanelContentChat : PanelContent
 			}
 		});
 
-		ChatMessages = new List<ChatMessage>();
+		ChatMessages = new List<ChatMessageContainer>();
 		MessagesRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
 
 		AddTestMessages(100);
@@ -67,7 +67,7 @@ public class PanelContentChat : PanelContent
 		}
 
 		GameObject newChatMessageObject = Instantiate(ChatMessagePrefab);
-		ChatMessage newChatMessage = newChatMessageObject.GetComponent<ChatMessage>();
+		ChatMessageContainer newChatMessage = newChatMessageObject.GetComponent<ChatMessageContainer>();
 		newChatMessage.Initialize();
 		newChatMessage.SetText(message);
 		newChatMessageObject.transform.SetParent(MessagesRoot);
@@ -85,7 +85,7 @@ public class PanelContentChat : PanelContent
 	public void AdjustSize()
 	{
 		float size = 0;
-		foreach (ChatMessage mesage in ChatMessages) { size += mesage.Rect.rect.height; }
+		foreach (ChatMessageContainer mesage in ChatMessages) { size += mesage.Rect.rect.height; }
 
 		if (size != MessagesRoot.rect.size.y)
 		{

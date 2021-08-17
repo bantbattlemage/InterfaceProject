@@ -13,6 +13,8 @@ public class LogInScreenController : MonoBehaviour
 	public delegate void SuccessfulLogInEvent();
 	public SuccessfulLogInEvent OnSuccessfulLogin;
 
+	private bool _waitingOnResponse = false;
+
 	public void InitializeLogInScreen()
 	{
 		GameObject logInPopUpObject = Instantiate(LogInPopUpPrefab, InterfaceController.Instance.PopUpLayer);
@@ -23,19 +25,20 @@ public class LogInScreenController : MonoBehaviour
 
 	public void ProcessLogInRequest(LogInRequest request)
 	{
-		string userName = request.Username;
-		string password = request.Password;
-
-		if (userName == null || password == null || userName == "" || password == "")
+		if (_waitingOnResponse)
 		{
+			Debug.LogWarning("LogIn request ignored, waiting on existing request response");
 			return;
 		}
+		_waitingOnResponse = true;
 
 		string json = JsonConvert.SerializeObject(request);
 		string appendedURL = $"{GameController.Instance.ServerURL}{"login/"}";
 
 		StartCoroutine(RestWebClient.Instance.HttpPost(appendedURL, json, (r) =>
 		{
+			_waitingOnResponse = false;
+
 			if (r.Error != null)
 			{
 				InterfaceController.Instance.LogWarning(r.Error);
@@ -48,7 +51,7 @@ public class LogInScreenController : MonoBehaviour
 
 				if (response.Success)
 				{
-					GameController.Instance.SessionToken = password;
+					GameController.Instance.SessionToken = request.Password;
 					LogInPopUp.ClosePopUp();
 					OnSuccessfulLogin();
 				}
