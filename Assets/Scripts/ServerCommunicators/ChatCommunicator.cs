@@ -4,47 +4,8 @@ using RestClient.Core;
 using Newtonsoft.Json;
 using System.Linq;
 
-public class ChatController : MonoBehaviour
+public class ChatCommunicator : Singleton<ChatCommunicator>, ICommunicator
 {
-
-	private static ChatController _instance;
-	public static ChatController Instance
-	{
-		get
-		{
-			if (_instance != null)
-			{
-				return _instance;
-			}
-
-			_instance = GameController.Instance.GetComponent<ChatController>();
-
-			if (_instance == null)
-			{
-				_instance = GameController.Instance.gameObject.AddComponent<ChatController>();
-			}
-
-			return _instance;
-		}
-	}
-
-	public static void Initialize()
-	{
-		_instance = Instance;
-	}
-
-	// public void SendReadDisplayNameRequest(int userId, System.Action<GetUserResponse> callBack)
-	// {
-	// 	string appendedURL = $"{GameController.Instance.ServerURL}login/{userId}";
-
-	// 	_waitingOnResponse = true;
-	// 	StartCoroutine(RestWebClient.Instance.HttpGet(appendedURL, (r) =>
-	// 	{
-	// 		GetUserResponse response = JsonConvert.DeserializeObject<GetUserResponse>(r.Data);
-	// 		callBack(response);
-	// 	}));
-	// }
-
 	public void SendChatJoinRequest(int userId, int roomId, string username, System.Action<ChatJoinResponse> callBack)
 	{
 		string appendedURL = $"{GameController.Instance.ServerURL}chat/";

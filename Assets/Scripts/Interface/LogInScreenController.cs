@@ -32,35 +32,51 @@ public class LogInScreenController : MonoBehaviour
 		}
 		_waitingOnResponse = true;
 
-		string json = JsonConvert.SerializeObject(request);
-		string appendedURL = $"{GameController.Instance.ServerURL}{"login/"}";
-
-		StartCoroutine(RestWebClient.Instance.HttpPost(appendedURL, json, (r) =>
+		LoginCommunicator.Instance.ProcessLogInRequest(request, (response) =>
 		{
 			_waitingOnResponse = false;
 
-			if (r.Error != null)
+			if (response.Success)
 			{
-				InterfaceController.Instance.LogWarning(r.Error);
+				GameController.Instance.Player.SetSessionAccessKey(response.AccessKey);
+				LogInPopUp.ClosePopUp();
+				OnSuccessfulLogin();
 			}
 			else
 			{
-				Debug.Log(r.Data);
-
-				LogInResponse response = JsonConvert.DeserializeObject<LogInResponse>(r.Data);
-
-				if (response.Success)
-				{
-					GameController.Instance.SessionToken = request.Password;
-					LogInPopUp.ClosePopUp();
-					OnSuccessfulLogin();
-				}
-				else
-				{
-					InterfaceController.Instance.LogWarning(response.Message);
-				}
+				InterfaceController.Instance.LogWarning(response.Message);
 			}
-		}));
+		});
+
+		// string json = JsonConvert.SerializeObject(request);
+		// string appendedURL = $"{GameController.Instance.ServerURL}{"login/"}";
+
+		// StartCoroutine(RestWebClient.Instance.HttpPost(appendedURL, json, (r) =>
+		// {
+		// 	_waitingOnResponse = false;
+
+		// 	if (r.Error != null)
+		// 	{
+		// 		InterfaceController.Instance.LogWarning(r.Error);
+		// 	}
+		// 	else
+		// 	{
+		// 		Debug.Log(r.Data);
+
+		// 		LogInResponse response = JsonConvert.DeserializeObject<LogInResponse>(r.Data);
+
+		// 		if (response.Success)
+		// 		{
+		// 			GameController.Instance.SessionToken = request.Password;
+		// 			LogInPopUp.ClosePopUp();
+		// 			OnSuccessfulLogin();
+		// 		}
+		// 		else
+		// 		{
+		// 			InterfaceController.Instance.LogWarning(response.Message);
+		// 		}
+		// 	}
+		// }));
 	}
 
 	public void SubmitLogInRequest(string userName, string password, string email)

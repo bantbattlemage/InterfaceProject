@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
 	public GameObject InterfacePrefab;
 	public InterfaceController PlayerInterface { get; private set; }
+	public string SessionAccessKey { get; private set; }
 
 	public void Initialize()
 	{
@@ -20,5 +19,11 @@ public class PlayerController : MonoBehaviour
 			PlayerInterface.LogInScreen.gameObject.SetActive(true);
 			PlayerInterface.LogInScreen.InitializeLogInScreen();
 		}
+	}
+
+	public void SetSessionAccessKey(string newAccessKey)
+	{
+		SessionAccessKey = newAccessKey;
+		Debug.LogWarning(SessionAccessKey);
 	}
 }

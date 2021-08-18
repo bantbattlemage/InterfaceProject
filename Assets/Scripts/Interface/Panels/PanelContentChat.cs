@@ -84,7 +84,7 @@ public class PanelContentChat : PanelContent
 	{
 		if (_user == null)
 		{
-			ChatController.Instance.SendChatJoinRequest(1, 1, "bob", (response) =>
+			ChatCommunicator.Instance.SendChatJoinRequest(1, 1, "bob", (response) =>
 		   {
 			   if (_user != null)
 			   {
@@ -98,28 +98,7 @@ public class PanelContentChat : PanelContent
 		}
 		else
 		{
-			// ChatMessage lastReadMessage;
-
-			// if (ChatMessages.Count > 0)
-			// {
-			// 	lastReadMessage = ChatMessages[ChatMessages.Count - 1].Data;
-			// }
-			// else
-			// {
-			// 	lastReadMessage = new ChatMessage();
-			// 	lastReadMessage.Message = "";
-			// 	lastReadMessage.RoomId = 1;
-			// 	lastReadMessage.UserId = -1;
-			// 	DateTime fakeTime = DateTime.Today.AddMonths(-1);
-			// 	lastReadMessage.TimeStamp = fakeTime;
-			// }
-
-			// ChatController.Instance.SendChatUpdateRequest(lastReadMessage, (response) =>
-			// {
-			// 	DisplayChatMessages(response);
-			// });
-
-			ChatController.Instance.SendChatReadRequest(_user.RoomId, (response) =>
+			ChatCommunicator.Instance.SendChatReadRequest(_user.RoomId, (response) =>
 			{
 				DisplayChatMessages(response);
 			});
@@ -138,7 +117,7 @@ public class PanelContentChat : PanelContent
 		chatMessage.Username = _user.Username;
 		chatMessage.Message = message;
 
-		ChatController.Instance.SendChatPostRequest(chatMessage, (response) =>
+		ChatCommunicator.Instance.SendChatPostRequest(chatMessage, (response) =>
 		{
 			Debug.Log("posted message successfully");
 		});
@@ -199,20 +178,3 @@ public class PanelContentChat : PanelContent
 		}
 	}
 }
-
-
-// private void AddTestMessages(int numberOFMessages = 20)
-// {
-// 	for (int i = 0; i < numberOFMessages; i++)
-// 	{
-// 		int random = Random.Range(1, 5);
-// 		string s = $"{i} ({random}): ";
-
-// 		for (int k = 0; k < random; k++)
-// 		{
-// 			s += SelectableText.LoremIpsum + " ";
-// 		}
-
-// 		AddMessage(s);
-// 	}
-// }

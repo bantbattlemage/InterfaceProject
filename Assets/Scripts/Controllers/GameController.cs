@@ -9,8 +9,6 @@ public class GameController : MonoBehaviour
 	public GameObject PlayerControllerPrefab;
 
 	public PlayerController Player { get; private set; }
-	public string SessionToken { get; set; }
-
 	private static string LocalHost { get { return "https://localhost:5001/api/"; } }
 
 	private static GameController _instance;
@@ -37,6 +35,5 @@ public class GameController : MonoBehaviour
 		GameObject newPlayerObject = Instantiate(PlayerControllerPrefab);
 		Player = newPlayerObject.GetComponent<PlayerController>();
 		Player.Initialize();
-		ChatController.Initialize();
 	}
 }
