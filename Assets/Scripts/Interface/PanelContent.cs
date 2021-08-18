@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PanelContent : MonoBehaviour
 {
+	public RectTransform Rect { get { if (_rect == null) { _rect = GetComponent<RectTransform>(); } return _rect; } }
+	private RectTransform _rect;
+
 	public virtual void Initialize()
 	{
 

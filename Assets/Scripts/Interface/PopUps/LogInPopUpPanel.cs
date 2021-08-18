@@ -38,6 +38,14 @@ public class LogInPopUpPanel : PopUpPanel
 			}
 		});
 
+		EmailField.onEndEdit.AddListener((text) =>
+		{
+			if (Input.GetKeyDown(KeyCode.Return))
+			{
+				OnRegisterButtonPressed(LogInField.text, PasswordField.text, EmailField.text);
+			}
+		});
+
 		CloseButton.onClick.AddListener(ClosePopUp);
 		LogInSubmitButton.onClick.AddListener(() => { OnLogInButtonPressed(LogInField.text, PasswordField.text); });
 		RegisterSubmitButton.onClick.AddListener(() => { OnRegisterButtonPressed(LogInField.text, PasswordField.text, EmailField.text); });
@@ -45,19 +53,29 @@ public class LogInPopUpPanel : PopUpPanel
 
 	public void OnLogInButtonPressed(string userName, string password)
 	{
-		LogInField.text = "";
-		PasswordField.text = "";
-		EmailField.text = "";
-
-		LogInSubmit(userName, password, "");
+		SubmitLogIn(userName, password);
 	}
 
-	public void OnRegisterButtonPressed(string userName, string password, string email)
+	public void OnRegisterButtonPressed(string username, string password, string email)
+	{
+		SubmitRegister(username, password, email);
+	}
+
+	public void SubmitLogIn(string username, string password)
 	{
 		LogInField.text = "";
 		PasswordField.text = "";
 		EmailField.text = "";
 
-		RegisterSubmit(userName, password, email);
+		LogInSubmit(username, password, "");
+	}
+
+	public void SubmitRegister(string username, string password, string email = "")
+	{
+		LogInField.text = "";
+		PasswordField.text = "";
+		EmailField.text = "";
+
+		RegisterSubmit(username, password, email);
 	}
 }

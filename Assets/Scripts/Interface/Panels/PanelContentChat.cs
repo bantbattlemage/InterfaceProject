@@ -14,13 +14,10 @@ public class PanelContentChat : PanelContent
 
 	public List<ChatMessageContainer> ChatMessages;
 
+	public int RoomId { get { return _roomId; } }
+
 	public static int CharacterLimit { get { return 1000; } }
 
-	public RectTransform Rect { get { if (_rect == null) { _rect = GetComponent<RectTransform>(); } return _rect; } }
-	private RectTransform _rect;
-
-	private float _echoInterval = 1f;
-	private Coroutine _echo;
 	private ChatUser _user;
 	private int _roomId;
 
@@ -31,10 +28,21 @@ public class PanelContentChat : PanelContent
 
 	void OnDestroy()
 	{
-		if (_echo != null)
+		if (!ChatCommunicator.Quitting)
 		{
-			StopCoroutine(_echo);
+			ChatCommunicator.Instance.RemoveChatPanel(this);
+			ChatCommunicator.Instance.NewChatInformationRecieved -= OnNewChatInformationRecieved;
 		}
+	}
+
+	private void OnNewChatInformationRecieved(ChatMessageResponse messageResponse)
+	{
+		DisplayChatMessages(messageResponse);
+	}
+
+	private void OnScrollTopHit()
+	{
+		Debug.Log("Nothing implemented on scroll top hit");
 	}
 
 	public override void Initialize(int roomId = 1)
@@ -45,14 +53,13 @@ public class PanelContentChat : PanelContent
 		}
 
 		TextField.characterLimit = CharacterLimit;
-		TextField.onEndEdit.AddListener((x) =>
+		TextField.onEndEdit.AddListener((message) =>
 		{
 			if (Input.GetKeyDown(KeyCode.Return))
 			{
-				SubmitMessage(x);
+				SubmitMessage(message);
+				TextField.text = "";
 			}
-
-			TextField.text = "";
 		});
 
 		ScrollArea.onValueChanged.AddListener((vector) =>
@@ -67,51 +74,22 @@ public class PanelContentChat : PanelContent
 		MessagesRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
 
 		_roomId = roomId;
+		PlayerController player = GameController.Instance.Player;
 
-		StartCoroutine(Echo());
-	}
-
-	// private IEnumerator<WaitForSeconds> StartEcho()
-	// {
-	// 	if (_echo != null)
-	// 	{
-	// 		throw new System.Exception("tried to start echo already running");
-	// 	}
-
-	// 	yield return new WaitForSeconds(2f);
-
-	// 	_echo = StartCoroutine(Echo());
-	// }
-
-	private IEnumerator<WaitForSeconds> Echo()
-	{
-		if (_user == null)
+		ChatCommunicator.Instance.NewChatInformationRecieved += OnNewChatInformationRecieved;
+		ChatCommunicator.Instance.SendChatJoinRequest(player.UserId, _roomId, player.Username, (response) =>
 		{
-			PlayerController player = GameController.Instance.Player;
-
-			ChatCommunicator.Instance.SendChatJoinRequest(player.UserId, _roomId, player.Username, (response) =>
-		   {
-			   if (_user != null)
-			   {
-				   Debug.LogWarning("Already initialized chat room.");
-				   return;
-			   }
-
-			   _user = response.AssignedChatUser;
-			   DisplayChatMessages(new ChatMessageResponse() { ChatMessages = response.ChatMessages });
-		   });
-		}
-		else
-		{
-			ChatCommunicator.Instance.SendChatReadRequest(_user.RoomId, (response) =>
+			if (_user != null)
 			{
-				DisplayChatMessages(response);
-			});
-		}
+				Debug.LogWarning("Already initialized chat room.");
+				return;
+			}
 
-		yield return new WaitForSeconds(_echoInterval);
+			_user = response.AssignedChatUser;
+			ChatCommunicator.Instance.RegisterChatPanel(this);
 
-		_echo = StartCoroutine(Echo());
+			DisplayChatMessages(new ChatMessageResponse() { ChatMessages = response.ChatMessages });
+		});
 	}
 
 	public void SubmitMessage(string message)
@@ -156,7 +134,7 @@ public class PanelContentChat : PanelContent
 			return;
 		}
 
-		string message = $"{data.Username} ({data.TimeStamp.ToLongTimeString()}): {data.Message}";
+		string message = $"{data.Username} ({data.TimeStamp.ToLocalTime()}): {data.Message}";
 
 		GameObject newChatMessageObject = Instantiate(ChatMessagePrefab);
 		ChatMessageContainer newChatMessage = newChatMessageObject.GetComponent<ChatMessageContainer>();
@@ -165,11 +143,6 @@ public class PanelContentChat : PanelContent
 		newChatMessageObject.transform.SetParent(MessagesRoot);
 		ChatMessages.Add(newChatMessage);
 		ChatMessages.ForEach(x => x.AdjustSize());
-	}
-
-	private void OnScrollTopHit()
-	{
-
 	}
 
 	public void AdjustSize()
