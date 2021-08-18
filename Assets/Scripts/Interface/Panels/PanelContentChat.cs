@@ -19,6 +19,7 @@ public class PanelContentChat : PanelContent
 	public RectTransform Rect { get { if (_rect == null) { _rect = GetComponent<RectTransform>(); } return _rect; } }
 	private RectTransform _rect;
 
+	private float _echoInterval = 1f;
 	private Coroutine _echo;
 	private ChatUser _user;
 
@@ -64,12 +65,6 @@ public class PanelContentChat : PanelContent
 		ChatMessages = new List<ChatMessageContainer>();
 		MessagesRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
 
-		// ChatController.Instance.SendChatReadRequest(1, (response) =>
-		// {
-		// 	DisplayChatMessages(response);
-		// 	StartCoroutine(StartEcho());
-		// });
-
 		StartCoroutine(Echo());
 	}
 
@@ -91,35 +86,46 @@ public class PanelContentChat : PanelContent
 		{
 			ChatController.Instance.SendChatJoinRequest(1, 1, "bob", (response) =>
 		   {
+			   if (_user != null)
+			   {
+				   Debug.LogWarning("Already initialized chat room.");
+				   return;
+			   }
+
 			   _user = response.AssignedChatUser;
 			   DisplayChatMessages(new ChatMessageResponse() { ChatMessages = response.ChatMessages });
 		   });
 		}
 		else
 		{
-			ChatMessage lastReadMessage;
+			// ChatMessage lastReadMessage;
 
-			if (ChatMessages.Count > 0)
-			{
-				lastReadMessage = ChatMessages[ChatMessages.Count - 1].Data;
-			}
-			else
-			{
-				lastReadMessage = new ChatMessage();
-				lastReadMessage.Message = "";
-				lastReadMessage.RoomId = 1;
-				lastReadMessage.UserId = -1;
-				DateTime fakeTime = DateTime.Today.AddMonths(-1);
-				lastReadMessage.TimeStamp = fakeTime;
-			}
+			// if (ChatMessages.Count > 0)
+			// {
+			// 	lastReadMessage = ChatMessages[ChatMessages.Count - 1].Data;
+			// }
+			// else
+			// {
+			// 	lastReadMessage = new ChatMessage();
+			// 	lastReadMessage.Message = "";
+			// 	lastReadMessage.RoomId = 1;
+			// 	lastReadMessage.UserId = -1;
+			// 	DateTime fakeTime = DateTime.Today.AddMonths(-1);
+			// 	lastReadMessage.TimeStamp = fakeTime;
+			// }
 
-			ChatController.Instance.SendChatUpdateRequest(lastReadMessage, (response) =>
+			// ChatController.Instance.SendChatUpdateRequest(lastReadMessage, (response) =>
+			// {
+			// 	DisplayChatMessages(response);
+			// });
+
+			ChatController.Instance.SendChatReadRequest(_user.RoomId, (response) =>
 			{
 				DisplayChatMessages(response);
 			});
 		}
 
-		yield return new WaitForSeconds(2f);
+		yield return new WaitForSeconds(_echoInterval);
 
 		_echo = StartCoroutine(Echo());
 	}
@@ -127,8 +133,9 @@ public class PanelContentChat : PanelContent
 	public void SubmitMessage(string message)
 	{
 		ChatMessage chatMessage = new ChatMessage();
-		chatMessage.UserId = 1;
-		chatMessage.RoomId = 1;
+		chatMessage.UserId = _user.UserId;
+		chatMessage.RoomId = _user.RoomId;
+		chatMessage.Username = _user.Username;
 		chatMessage.Message = message;
 
 		ChatController.Instance.SendChatPostRequest(chatMessage, (response) =>
@@ -160,13 +167,12 @@ public class PanelContentChat : PanelContent
 			return;
 		}
 
-		if (ChatMessages.Any(x => x.Data == data))
+		if (ChatMessages.Any(x => x.Data.TimeStamp == data.TimeStamp && x.Data.Message == data.Message))
 		{
 			return;
 		}
 
-		string message = data.Username;
-		message += ": " + data.Message;
+		string message = $"{data.Username} ({data.TimeStamp.ToLongTimeString()}): {data.Message}";
 
 		GameObject newChatMessageObject = Instantiate(ChatMessagePrefab);
 		ChatMessageContainer newChatMessage = newChatMessageObject.GetComponent<ChatMessageContainer>();
@@ -175,22 +181,6 @@ public class PanelContentChat : PanelContent
 		newChatMessageObject.transform.SetParent(MessagesRoot);
 		ChatMessages.Add(newChatMessage);
 		ChatMessages.ForEach(x => x.AdjustSize());
-
-		// ChatController.Instance.SendReadDisplayNameRequest(data.UserId, (response) =>
-		// {
-		// 	string message = response.User.Username;
-		// 	message += ": " + data.Message;
-
-		// 	GameObject newChatMessageObject = Instantiate(ChatMessagePrefab);
-		// 	ChatMessageContainer newChatMessage = newChatMessageObject.GetComponent<ChatMessageContainer>();
-		// 	newChatMessage.Initialize(data);
-		// 	newChatMessage.SetText(message);
-		// 	newChatMessageObject.transform.SetParent(MessagesRoot);
-		// 	ChatMessages.Add(newChatMessage);
-		// 	ChatMessages.ForEach(x => x.AdjustSize());
-
-		// 	AdjustSize();
-		// });
 	}
 
 	private void OnScrollTopHit()

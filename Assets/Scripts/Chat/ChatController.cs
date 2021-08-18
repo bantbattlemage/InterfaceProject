@@ -53,7 +53,6 @@ public class ChatController : MonoBehaviour
 		request.Username = username;
 		request.ChatRoomId = roomId;
 		request.SenderUserId = userId;
-		request.Username = "test";
 
 		string json = JsonConvert.SerializeObject(request);
 
@@ -96,6 +95,24 @@ public class ChatController : MonoBehaviour
 	}
 
 	public void SendChatUpdateRequest(ChatMessage lastReadMessage, System.Action<ChatMessageResponse> callBack)
+	{
+		ChatMessageReadRequest request = new ChatMessageReadRequest();
+		request.ChatRoomId = lastReadMessage.RoomId;
+		request.SenderUserId = 1;
+		request.LastMessageRead = lastReadMessage.TimeStamp;
+
+		string appendedURL = $"{GameController.Instance.ServerURL}chatupdate/";
+		string json = JsonConvert.SerializeObject(request);
+
+		StartCoroutine(RestWebClient.Instance.HttpPut(appendedURL, json, (r) =>
+		{
+			ChatMessageResponse response = JsonConvert.DeserializeObject<ChatMessageResponse>(r.Data);
+
+			callBack(response);
+		}));
+	}
+
+	public void SendGetAllChatMessagesRequest(ChatMessage lastReadMessage, System.Action<ChatMessageResponse> callBack)
 	{
 		ChatMessageReadRequest request = new ChatMessageReadRequest();
 		request.ChatRoomId = lastReadMessage.RoomId;
