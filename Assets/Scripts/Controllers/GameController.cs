@@ -37,5 +37,6 @@ public class GameController : MonoBehaviour
 		GameObject newPlayerObject = Instantiate(PlayerControllerPrefab);
 		Player = newPlayerObject.GetComponent<PlayerController>();
 		Player.Initialize();
+		ChatController.Initialize();
 	}
 }
