@@ -20,6 +20,7 @@ public class PanelContentChat : PanelContent
 	private RectTransform _rect;
 
 	private Coroutine _echo;
+	private ChatUser _user;
 
 	void Update()
 	{
@@ -86,28 +87,37 @@ public class PanelContentChat : PanelContent
 
 	private IEnumerator<WaitForSeconds> Echo()
 	{
-		ChatMessage lastReadMessage;
-
-		if (ChatMessages.Count > 0)
+		if (_user == null)
 		{
-			lastReadMessage = ChatMessages[ChatMessages.Count - 1].Data;
+			ChatController.Instance.SendChatJoinRequest(1, 1, "bob", (response) =>
+		   {
+			   _user = response.AssignedChatUser;
+			   DisplayChatMessages(new ChatMessageResponse() { ChatMessages = response.ChatMessages });
+		   });
 		}
 		else
 		{
-			lastReadMessage = new ChatMessage();
-			lastReadMessage.Message = "";
-			lastReadMessage.RoomId = 1;
-			lastReadMessage.UserId = -1;
-			DateTime fakeTime = DateTime.Today.AddYears(-1);
-			// DateTime oneYear = DateTime.MinValue.AddYears(1);
-			// TimeSpan s = fakeTime.Subtract(oneYear);
-			lastReadMessage.TimeStamp = fakeTime;
-		}
+			ChatMessage lastReadMessage;
 
-		ChatController.Instance.SendChatUpdateRequest(lastReadMessage, (response) =>
-		{
-			DisplayChatMessages(response);
-		});
+			if (ChatMessages.Count > 0)
+			{
+				lastReadMessage = ChatMessages[ChatMessages.Count - 1].Data;
+			}
+			else
+			{
+				lastReadMessage = new ChatMessage();
+				lastReadMessage.Message = "";
+				lastReadMessage.RoomId = 1;
+				lastReadMessage.UserId = -1;
+				DateTime fakeTime = DateTime.Today.AddMonths(-1);
+				lastReadMessage.TimeStamp = fakeTime;
+			}
+
+			ChatController.Instance.SendChatUpdateRequest(lastReadMessage, (response) =>
+			{
+				DisplayChatMessages(response);
+			});
+		}
 
 		yield return new WaitForSeconds(2f);
 
@@ -155,7 +165,7 @@ public class PanelContentChat : PanelContent
 			return;
 		}
 
-		string message = data.UserId.ToString("000");
+		string message = data.Username;
 		message += ": " + data.Message;
 
 		GameObject newChatMessageObject = Instantiate(ChatMessagePrefab);
