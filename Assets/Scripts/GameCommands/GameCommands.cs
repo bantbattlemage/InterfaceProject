@@ -132,7 +132,7 @@ public static class GameCommands
 		{
 			InterfacePanel chatPanel = InterfaceController.Instance.CreateNewPanel(InterfaceController.Instance.ChatPrefab, (Transform)t);
 			PanelContent chat = chatPanel.ContentObjects[0] as PanelContentChat;
-			chat.Initialize(20);
+			chat.Initialize(Globals.UNIVERSE_CHAT);
 		});
 
 		return command.ProcessCommand(input, sender);

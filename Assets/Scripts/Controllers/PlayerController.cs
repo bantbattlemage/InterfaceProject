@@ -1,3 +1,4 @@
+using GameComms;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -5,6 +6,8 @@ public class PlayerController : MonoBehaviour
 	public GameObject InterfacePrefab;
 	public InterfaceController PlayerInterface { get; private set; }
 	public string SessionAccessKey { get; private set; }
+	public string Username { get; private set; }
+	public int UserId { get; private set; }
 
 	public void Initialize()
 	{
@@ -21,9 +24,10 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	public void SetSessionAccessKey(string newAccessKey)
+	public void SetPlayerCredentials(int userId, string username, string accessKey)
 	{
-		SessionAccessKey = newAccessKey;
-		Debug.LogWarning(SessionAccessKey);
+		UserId = userId;
+		Username = username;
+		SessionAccessKey = accessKey;
 	}
 }

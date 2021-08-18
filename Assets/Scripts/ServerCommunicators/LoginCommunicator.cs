@@ -8,6 +8,22 @@ using UnityEngine;
 public class LoginCommunicator : Singleton<LoginCommunicator>, ICommunicator
 {
 	private bool _waitingOnResponse = false;
+	private float _timeout = 3f;
+	private float _counter = 0;
+
+	void Update()
+	{
+		if (_waitingOnResponse)
+		{
+			_counter += Time.deltaTime;
+
+			if (_counter >= _timeout)
+			{
+				_waitingOnResponse = false;
+				_counter = 0;
+			}
+		}
+	}
 
 	public void ProcessLogInRequest(LogInRequest request, System.Action<LogInResponse> callBack)
 	{

@@ -22,6 +22,7 @@ public class PanelContentChat : PanelContent
 	private float _echoInterval = 1f;
 	private Coroutine _echo;
 	private ChatUser _user;
+	private int _roomId;
 
 	void Update()
 	{
@@ -36,7 +37,7 @@ public class PanelContentChat : PanelContent
 		}
 	}
 
-	public override void Initialize(int numberOfChatMessages = 20)
+	public override void Initialize(int roomId = 1)
 	{
 		if (ChatMessages != null && ChatMessages.Count != 0)
 		{
@@ -65,26 +66,30 @@ public class PanelContentChat : PanelContent
 		ChatMessages = new List<ChatMessageContainer>();
 		MessagesRoot.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
 
+		_roomId = roomId;
+
 		StartCoroutine(Echo());
 	}
 
-	private IEnumerator<WaitForSeconds> StartEcho()
-	{
-		if (_echo != null)
-		{
-			throw new System.Exception("tried to start echo already running");
-		}
+	// private IEnumerator<WaitForSeconds> StartEcho()
+	// {
+	// 	if (_echo != null)
+	// 	{
+	// 		throw new System.Exception("tried to start echo already running");
+	// 	}
 
-		yield return new WaitForSeconds(2f);
+	// 	yield return new WaitForSeconds(2f);
 
-		_echo = StartCoroutine(Echo());
-	}
+	// 	_echo = StartCoroutine(Echo());
+	// }
 
 	private IEnumerator<WaitForSeconds> Echo()
 	{
 		if (_user == null)
 		{
-			ChatCommunicator.Instance.SendChatJoinRequest(1, 1, "bob", (response) =>
+			PlayerController player = GameController.Instance.Player;
+
+			ChatCommunicator.Instance.SendChatJoinRequest(player.UserId, _roomId, player.Username, (response) =>
 		   {
 			   if (_user != null)
 			   {
