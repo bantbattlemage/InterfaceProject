@@ -279,10 +279,11 @@ public class ScalablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 			}
 			else
 			{
-				float verticalRampMultiplier = 0.5f;
+				float horizontalModifier = 2f;
+				float verticalModifier = 2f;
 
 				Vector2 size = new Vector2(_element.flexibleWidth, _element.flexibleHeight);
-				Vector2 newSize = size + new Vector2(eventData.delta.x * _scaleFactor.x, eventData.delta.y * _scaleFactor.y * verticalRampMultiplier);
+				Vector2 newSize = size + new Vector2(eventData.delta.x * _scaleFactor.x * horizontalModifier, eventData.delta.y * _scaleFactor.y * verticalModifier);
 
 				if ((newSize.x >= _maxSize.x || newSize.x <= _minSize.x) || (newSize.y >= _maxSize.y || newSize.y <= _minSize.y))
 				{

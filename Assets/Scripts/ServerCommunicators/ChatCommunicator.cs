@@ -34,7 +34,7 @@ public class ChatCommunicator : Singleton<ChatCommunicator>, ICommunicator
 		{
 			SendChatReadRequest(chat.RoomId, (response) =>
 			{
-				if (response.ChatMessages != null && response.ChatMessages.Length > 0)
+				if (response != null && response.ChatMessages != null && response.ChatMessages.Length > 0)
 				{
 					NewChatInformationRecieved(response);
 				}
@@ -70,6 +70,12 @@ public class ChatCommunicator : Singleton<ChatCommunicator>, ICommunicator
 
 	public void SendChatJoinRequest(int userId, int roomId, string username, System.Action<ChatJoinResponse> callBack)
 	{
+		if (!PulseCommunicator.Pulse)
+		{
+			Debug.LogWarning("Waiting for server connection...");
+			return;
+		}
+
 		string appendedURL = $"{GameController.Instance.ServerURL}chat/";
 
 		JoinChatRoomRequest request = new JoinChatRoomRequest();
@@ -88,6 +94,12 @@ public class ChatCommunicator : Singleton<ChatCommunicator>, ICommunicator
 
 	public void SendChatPostRequest(ChatMessage message, System.Action<ChatMessageResponse> callBack)
 	{
+		if (!PulseCommunicator.Pulse)
+		{
+			Debug.LogWarning("Waiting for server connection...");
+			return;
+		}
+
 		string appendedURL = $"{GameController.Instance.ServerURL}chat/";
 
 		ChatMessagePostRequest request = new ChatMessagePostRequest();
@@ -108,6 +120,12 @@ public class ChatCommunicator : Singleton<ChatCommunicator>, ICommunicator
 
 	public void SendChatReadRequest(int chatRoomId, System.Action<ChatMessageResponse> callBack)
 	{
+		if (!PulseCommunicator.Pulse)
+		{
+			Debug.LogWarning("Waiting for server connection...");
+			return;
+		}
+
 		string appendedURL = $"{GameController.Instance.ServerURL}chat/{chatRoomId}";
 
 		StartCoroutine(RestWebClient.Instance.HttpGet(appendedURL, (r) =>

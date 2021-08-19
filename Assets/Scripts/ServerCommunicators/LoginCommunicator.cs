@@ -27,6 +27,12 @@ public class LoginCommunicator : Singleton<LoginCommunicator>, ICommunicator
 
 	public void ProcessLogInRequest(LogInRequest request, System.Action<LogInResponse> callBack)
 	{
+		if (!PulseCommunicator.Pulse)
+		{
+			Debug.LogWarning("Waiting for server connection...");
+			return;
+		}
+
 		if (_waitingOnResponse)
 		{
 			Debug.LogWarning("LogIn request ignored, waiting on existing request response");

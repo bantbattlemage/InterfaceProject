@@ -134,13 +134,18 @@ public class PanelContentChat : PanelContent
 			return;
 		}
 
-		string message = $"{data.Username} ({data.TimeStamp.ToLocalTime()}): {data.Message}";
+		//string message = $"{data.Username} ({data.TimeStamp.ToLocalTime()}): {data.Message}";
 
 		GameObject newChatMessageObject = Instantiate(ChatMessagePrefab);
 		ChatMessageContainer newChatMessage = newChatMessageObject.GetComponent<ChatMessageContainer>();
-		newChatMessage.Initialize(data);
-		newChatMessage.SetText(message);
 		newChatMessageObject.transform.SetParent(MessagesRoot);
+		newChatMessage.Initialize(data, 60);
+
+		if (ChatMessages.Count % 2 != 0)
+		{
+			newChatMessageObject.GetComponent<Image>().enabled = false;
+		}
+
 		ChatMessages.Add(newChatMessage);
 		ChatMessages.ForEach(x => x.AdjustSize());
 	}

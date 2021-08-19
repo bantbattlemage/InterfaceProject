@@ -17,7 +17,7 @@ public class SelectableText : MonoBehaviour
 
 	void Awake()
 	{
-		SetText(LoremIpsum);
+		//SetText(LoremIpsum);
 	}
 
 	void Update()

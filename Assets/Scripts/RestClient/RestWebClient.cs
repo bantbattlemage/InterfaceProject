@@ -17,7 +17,10 @@ namespace RestClient.Core
 
 				if (webRequest.result == UnityWebRequest.Result.ConnectionError)
 				{
-					InterfaceController.Instance.LogWarning(webRequest.error);
+					if (PulseCommunicator.Pulse)
+					{
+						InterfaceController.Instance.LogWarning(webRequest.error);
+					}
 
 					// callback(new Response
 					// {
@@ -97,7 +100,10 @@ namespace RestClient.Core
 
 				if (webRequest.result == UnityWebRequest.Result.ConnectionError)
 				{
-					InterfaceController.Instance.LogWarning(webRequest.error);
+					if (PulseCommunicator.Pulse)
+					{
+						InterfaceController.Instance.LogWarning(webRequest.error);
+					}
 
 					// callback(new Response
 					// {
@@ -149,7 +155,10 @@ namespace RestClient.Core
 
 				if (webRequest.result == UnityWebRequest.Result.ConnectionError)
 				{
-					InterfaceController.Instance.LogWarning(webRequest.error);
+					if (PulseCommunicator.Pulse)
+					{
+						InterfaceController.Instance.LogWarning(webRequest.error);
+					}
 					// callback(new Response
 					// {
 					// 	StatusCode = webRequest.responseCode,
