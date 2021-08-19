@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using RestClient.Core.Singletons;
-using UnityEngine;
 using UnityEngine.Networking;
 
 namespace RestClient.Core
@@ -33,7 +31,7 @@ namespace RestClient.Core
 				{
 					string data = System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data);
 					// data = data.Replace("\\u0027", "'");
-					Debug.Log("Data: " + data);
+					// Debug.Log("Data: " + data);
 					callback(new Response
 					{
 						StatusCode = webRequest.responseCode,

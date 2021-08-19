@@ -12,6 +12,7 @@ public class ChatCommunicator : Singleton<ChatCommunicator>, ICommunicator
 
 	private static List<PanelContentChat> _activeChats = new List<PanelContentChat>();
 
+	private int updateMessageCount = 5;
 	private float _echoInterval = 1f;
 	private Coroutine _echo;
 
@@ -32,7 +33,7 @@ public class ChatCommunicator : Singleton<ChatCommunicator>, ICommunicator
 	{
 		foreach (PanelContentChat chat in _activeChats)
 		{
-			SendChatReadRequest(chat.RoomId, (response) =>
+			SendChatUpdateRequest(chat.RoomId, updateMessageCount, (response) =>
 			{
 				if (response != null && response.ChatMessages != null && response.ChatMessages.Length > 0)
 				{
@@ -121,6 +122,9 @@ public class ChatCommunicator : Singleton<ChatCommunicator>, ICommunicator
 		}));
 	}
 
+	/// <summary>
+	///	Request the entire chat history.
+	/// </summary>
 	public void SendChatReadRequest(int chatRoomId, System.Action<ChatMessageResponse> callBack)
 	{
 		if (!PulseCommunicator.Pulse)
@@ -144,39 +148,29 @@ public class ChatCommunicator : Singleton<ChatCommunicator>, ICommunicator
 		}));
 	}
 
-	// public void SendChatUpdateRequest(ChatMessage lastReadMessage, System.Action<ChatMessageResponse> callBack)
-	// {
-	// 	ChatMessageReadRequest request = new ChatMessageReadRequest();
-	// 	request.ChatRoomId = lastReadMessage.RoomId;
-	// 	request.SenderUserId = 1;
-	// 	request.LastMessageRead = lastReadMessage.TimeStamp;
+	/// <summary>
+	///	Request the most recent chat history. Returns up to {searchDepth}+1 messages. (Zero-indexed, sending 0 returns 1 message)
+	/// </summary>
+	public void SendChatUpdateRequest(int chatRoomId, int searchDepth, System.Action<ChatMessageResponse> callBack)
+	{
+		if (!PulseCommunicator.Pulse)
+		{
+			Debug.LogWarning("Waiting for server connection...");
+			return;
+		}
 
-	// 	string appendedURL = $"{GameController.Instance.ServerURL}chatupdate/";
-	// 	string json = JsonConvert.SerializeObject(request);
+		string appendedURL = $"{GameController.Instance.ServerURL}chat/{chatRoomId}?depth={searchDepth}";
 
-	// 	StartCoroutine(RestWebClient.Instance.HttpPut(appendedURL, json, (r) =>
-	// 	{
-	// 		ChatMessageResponse response = JsonConvert.DeserializeObject<ChatMessageResponse>(r.Data);
+		StartCoroutine(RestWebClient.Instance.HttpGet(appendedURL, (r) =>
+		{
+			ChatMessageResponse response = JsonConvert.DeserializeObject<ChatMessageResponse>(r.Data);
 
-	// 		callBack(response);
-	// 	}));
-	// }
+			if (NewChatInformationRecieved != null)
+			{
+				NewChatInformationRecieved(response);
+			}
 
-	// public void SendGetAllChatMessagesRequest(ChatMessage lastReadMessage, System.Action<ChatMessageResponse> callBack)
-	// {
-	// 	ChatMessageReadRequest request = new ChatMessageReadRequest();
-	// 	request.ChatRoomId = lastReadMessage.RoomId;
-	// 	request.SenderUserId = 1;
-	// 	request.LastMessageRead = lastReadMessage.TimeStamp;
-
-	// 	string appendedURL = $"{GameController.Instance.ServerURL}chatupdate/";
-	// 	string json = JsonConvert.SerializeObject(request);
-
-	// 	StartCoroutine(RestWebClient.Instance.HttpPut(appendedURL, json, (r) =>
-	// 	{
-	// 		ChatMessageResponse response = JsonConvert.DeserializeObject<ChatMessageResponse>(r.Data);
-
-	// 		callBack(response);
-	// 	}));
-	// }
+			callBack(response);
+		}));
+	}
 }
