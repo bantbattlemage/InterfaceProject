@@ -36,7 +36,10 @@ public class ChatCommunicator : Singleton<ChatCommunicator>, ICommunicator
 			{
 				if (response != null && response.ChatMessages != null && response.ChatMessages.Length > 0)
 				{
-					NewChatInformationRecieved(response);
+					if (NewChatInformationRecieved != null)
+					{
+						NewChatInformationRecieved(response);
+					}
 				}
 			});
 		}
