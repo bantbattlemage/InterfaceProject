@@ -7,9 +7,6 @@ using System.Collections.Generic;
 
 public class ChatCommunicator : Singleton<ChatCommunicator>, ICommunicator
 {
-	public delegate void ChatInformationEvent(ChatMessageResponse messageResponse);
-	public ChatInformationEvent NewChatInformationRecieved;
-
 	private static List<PanelContentChat> _activeChats = new List<PanelContentChat>();
 
 	private int updateMessageCount = 5;
@@ -37,10 +34,7 @@ public class ChatCommunicator : Singleton<ChatCommunicator>, ICommunicator
 			{
 				if (response != null && response.ChatMessages != null && response.ChatMessages.Length > 0)
 				{
-					if (NewChatInformationRecieved != null)
-					{
-						NewChatInformationRecieved(response);
-					}
+					chat.DisplayChatMessages(response);
 				}
 			});
 		}
@@ -138,12 +132,6 @@ public class ChatCommunicator : Singleton<ChatCommunicator>, ICommunicator
 		StartCoroutine(RestWebClient.Instance.HttpGet(appendedURL, (r) =>
 		{
 			ChatMessageResponse response = JsonConvert.DeserializeObject<ChatMessageResponse>(r.Data);
-
-			if (NewChatInformationRecieved != null)
-			{
-				NewChatInformationRecieved(response);
-			}
-
 			callBack(response);
 		}));
 	}
@@ -164,12 +152,6 @@ public class ChatCommunicator : Singleton<ChatCommunicator>, ICommunicator
 		StartCoroutine(RestWebClient.Instance.HttpGet(appendedURL, (r) =>
 		{
 			ChatMessageResponse response = JsonConvert.DeserializeObject<ChatMessageResponse>(r.Data);
-
-			if (NewChatInformationRecieved != null)
-			{
-				NewChatInformationRecieved(response);
-			}
-
 			callBack(response);
 		}));
 	}

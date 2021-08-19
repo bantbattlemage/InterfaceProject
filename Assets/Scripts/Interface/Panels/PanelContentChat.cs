@@ -30,7 +30,6 @@ public class PanelContentChat : PanelContent
 		if (!ChatCommunicator.Quitting)
 		{
 			ChatCommunicator.Instance.RemoveChatPanel(this);
-			ChatCommunicator.Instance.NewChatInformationRecieved -= OnNewChatInformationRecieved;
 		}
 	}
 
@@ -75,7 +74,6 @@ public class PanelContentChat : PanelContent
 		_roomId = roomId;
 		PlayerController player = GameController.Instance.Player;
 
-		ChatCommunicator.Instance.NewChatInformationRecieved += OnNewChatInformationRecieved;
 		ChatCommunicator.Instance.SendChatJoinRequest(player.UserId, _roomId, player.Username, (response) =>
 		{
 			if (_user != null)
@@ -132,8 +130,6 @@ public class PanelContentChat : PanelContent
 		{
 			return;
 		}
-
-		//string message = $"{data.Username} ({data.TimeStamp.ToLocalTime()}): {data.Message}";
 
 		GameObject newChatMessageObject = Instantiate(ChatMessagePrefab);
 		ChatMessageContainer newChatMessage = newChatMessageObject.GetComponent<ChatMessageContainer>();

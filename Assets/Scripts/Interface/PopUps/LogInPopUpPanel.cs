@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class LogInPopUpPanel : PopUpPanel
 {
 	string LogInPromptText;
+	public Toggle SaveLogInBox;
 
 	public InputField LogInField { get { return InputFields[0]; } }
 	public InputField PasswordField { get { return InputFields[1]; } }
@@ -21,6 +22,12 @@ public class LogInPopUpPanel : PopUpPanel
 	public override void Initialize()
 	{
 		base.Initialize();
+
+		SaveLogInBox.isOn = PlayerPrefs.GetInt(Globals.SAVE_LOG_IN) == 0 ? false : true;
+		SaveLogInBox.onValueChanged.AddListener((x) =>
+		{
+			PlayerPrefs.SetInt(Globals.SAVE_LOG_IN, x == true ? 1 : 0);
+		});
 
 		LogInField.onEndEdit.AddListener((text) =>
 		{
