@@ -27,6 +27,9 @@ public class GameController : MonoBehaviour
 
 	void Start()
 	{
+		// Screen.fullScreenMode = FullScreenMode.MaximizedWindow;
+		// Screen.fullScreen = true;
+
 		if (UseLocalHost)
 		{
 			ServerURL = LocalHost;

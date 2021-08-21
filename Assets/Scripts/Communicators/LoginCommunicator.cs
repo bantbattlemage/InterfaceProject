@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using GameComms;
 using Newtonsoft.Json;
 using RestClient.Core;

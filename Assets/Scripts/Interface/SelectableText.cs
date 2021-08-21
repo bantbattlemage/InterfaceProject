@@ -15,11 +15,6 @@ public class SelectableText : MonoBehaviour
 
 	public static string LoremIpsum { get { return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum aliquam turpis non suscipit rhoncus. Nulla lectus nisi, tempor ut imperdiet eu, ultricies vitae neque. Duis sollicitudin lorem eget luctus cursus."; } }
 
-	void Awake()
-	{
-		//SetText(LoremIpsum);
-	}
-
 	void Update()
 	{
 		AdjustSize();

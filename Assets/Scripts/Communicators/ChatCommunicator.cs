@@ -1,9 +1,8 @@
 using UnityEngine;
 using GameComms;
 using RestClient.Core;
-using Newtonsoft.Json;
-using System.Linq;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 public class ChatCommunicator : Singleton<ChatCommunicator>, ICommunicator
 {
